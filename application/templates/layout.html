@@ -5,15 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Quicksand:wght@300..700&display=swap"
+      rel="stylesheet"
+    />
     <title>Crust Issues</title>
   </head>
   <body>
     <header class="header">
       <h1>Crust Issues</h1>
 
-      <nav class="header-nav">
+      <nav class="row">
         <a href="#">Sign in</a>
-        <a class="cta-secondary" href="#">Cart</a>
+        <a
+          class="cta-secondary row"
+          href="#"
+          {%
+          comment
+          %}
+          Get
+          number
+          from
+          the
+          backend
+          {%
+          endcomment
+          %}
+          >🛒 <span class="cart-counter">1</span>
+        </a>
       </nav>
     </header>
 

@@ -1,17 +1,22 @@
 * {
   padding: 0;
   margin: 0;
+  font-family: "Quicksand", sans-serif;
 }
 :root {
   --color-pink: rgb(255, 150, 213);
   --color-white: white;
+  --color-turqoise: rgb(112, 252, 243);
   --spacing-small: 0.5rem;
   --spacing-medium: 1rem;
   --spacing-large: 2rem;
   --rounded: 35px;
+  --rounded-full: 50%;
 }
-h1 {
+h1,
+h2 {
   color: var(--color-white);
+  font-family: "Bebas Neue", sans-serif;
 }
 .header {
   background-color: var(--color-pink);
@@ -24,7 +29,6 @@ a {
   text-decoration: none;
   color: var(--color-white);
 }
-
 .cta-primary {
   padding: var(--spacing-small) var(--spacing-medium);
   background-color: var(--color-pink);
@@ -36,19 +40,40 @@ a {
   color: var(--color-pink);
   border-radius: var(--rounded);
 }
-
-.header-nav {
+.row {
   display: flex;
   gap: var(--spacing-medium);
   align-items: center;
 }
-
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  align-items: center;
+}
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-container {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  color: var(--color-white);
+}
+.hero-container > h2 {
+  font-size: 40px;
+}
 .pizza-container {
   position: relative;
   height: 400px;
   width: 100vw;
 }
 .pizza-container > img {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -57,4 +82,41 @@ a {
   position: absolute;
   inset: 0;
   background-color: rgba(0, 0, 0, 0.8);
+}
+.cart-counter {
+  border-radius: var(--rounded);
+  padding: var(--spacing-small) var(--spacing-medium);
+  scale: 0.95;
+  background-color: var(--color-turqoise);
+  color: var(--color-white);
+  font-weight: 900;
+}
+
+@keyframes wiggle {
+  0% {
+    transform: rotate(0deg);
+  }
+  15% {
+    transform: rotate(-5deg);
+  }
+  30% {
+    transform: rotate(5deg);
+  }
+  45% {
+    transform: rotate(-5deg);
+  }
+  60% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+.wiggle {
+  display: inline-block;
+  animation: wiggle 0.6s ease-in-out infinite;
 }
