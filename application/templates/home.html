@@ -4,12 +4,28 @@
     <h2>PIZZA FOR EVERY MOOD</h2>
     <p>living our best life, one slice at a time</p>
     <div class="row">
-      <div>🍕</div>
-      <div>✨</div>
-      <div>💯</div>
+      <div class="wiggle emoji">🍕</div>
+      <div class="wiggle emoji">✨</div>
+      <div class="wiggle emoji">💯</div>
     </div>
   </div>
   <img src="/static/images/main-pizza.png" alt="" />
   <div class="overlay"></div>
+</div>
+
+<div class="pizza-grid center">
+  {% for pizza in pizzas %}
+  <div class="pizza-card">
+    <div class="emoji center">{{ pizza.icon }}</div>
+    <div class="description">
+      <div>
+        <h3>{{ pizza.name }}</h3>
+        <p>{{ pizza.description }}</p>
+        <p class="price">{{ pizza.base_price }} kr</p>
+      </div>
+      <button class="cta-primary w-full">add to cart</button>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}
