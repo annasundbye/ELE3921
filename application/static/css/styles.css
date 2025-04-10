@@ -1,0 +1,60 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+:root {
+  --color-pink: rgb(255, 150, 213);
+  --color-white: white;
+  --spacing-small: 0.5rem;
+  --spacing-medium: 1rem;
+  --spacing-large: 2rem;
+  --rounded: 35px;
+}
+h1 {
+  color: var(--color-white);
+}
+.header {
+  background-color: var(--color-pink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-small);
+}
+a {
+  text-decoration: none;
+  color: var(--color-white);
+}
+
+.cta-primary {
+  padding: var(--spacing-small) var(--spacing-medium);
+  background-color: var(--color-pink);
+}
+
+.cta-secondary {
+  padding: var(--spacing-small) var(--spacing-medium);
+  background-color: var(--color-white);
+  color: var(--color-pink);
+  border-radius: var(--rounded);
+}
+
+.header-nav {
+  display: flex;
+  gap: var(--spacing-medium);
+  align-items: center;
+}
+
+.pizza-container {
+  position: relative;
+  height: 400px;
+  width: 100vw;
+}
+.pizza-container > img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+}
