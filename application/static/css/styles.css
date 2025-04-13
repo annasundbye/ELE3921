@@ -46,6 +46,7 @@ button {
 .cta {
   padding: var(--spacing-medium) var(--spacing-large);
   font-weight: 900;
+  text-align: center;
 }
 .cta:hover {
   cursor: pointer;
@@ -200,11 +201,14 @@ button {
 .bg-yellow {
   background-color: var(--color-yellow);
 }
-.bg-turqoise {
+.bg-light-turqoise {
   background-color: var(--color-light-turqoise);
 }
 .bg-pink {
   background-color: var(--color-pink);
+}
+.bg-turqoise {
+  background-color: var(--color-turqoise);
 }
 .text-yellow {
   color: var(--color-yellow);

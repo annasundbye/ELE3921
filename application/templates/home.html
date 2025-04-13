@@ -13,6 +13,16 @@
   <div class="overlay"></div>
 </div>
 
+<div class="center" style="margin-top: 1.4rem">
+  <a
+    href="{% url 'application:menu' %}"
+    class="cta cta-primary bg-turqoise"
+    style="width: 16rem"
+  >
+    Explore the whole menu
+  </a>
+</div>
+
 <div class="product-grid center">
   {% for pizza in pizzas %}
   <div class="product-card bg-yellow">

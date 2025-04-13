@@ -13,7 +13,13 @@
           <p>{{ pizza.description }}</p>
           <p class="price">{{ pizza.base_price }} kr</p>
         </div>
-        <button class="cta cta-primary w-fit">add to cart</button>
+        <a
+          id="add-pizza-{{pizza.id}}"
+          href="{% url 'application:select-pizza' pizza_id=pizza.id %}"
+          class="cta cta-primary w-fit"
+        >
+          add to cart
+        </a>
       </div>
     </div>
     {% endfor %}
@@ -23,12 +29,12 @@
 
   <div class="product-grid center">
     {% for drink in drinks %}
-    <div class="product-card bg-turqoise">
+    <div class="product-card bg-light-turqoise">
       <div class="emoji center">{{ drink.icon }}</div>
       <div class="description">
         <div>
           <h3>{{ drink.name }}</h3>
-
+          <p>{{ drink.description }}</p>
           <p class="price">{{ drink.price }} kr</p>
         </div>
         <button class="cta cta-primary w-fit">add to cart</button>
@@ -37,4 +43,7 @@
     {% endfor %}
   </div>
 </div>
-{% endblock %}
+
+{% comment %}
+<script src="/static/js/add-to-cart.js"></script>
+{% endcomment %} {% endblock %}
