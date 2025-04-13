@@ -43,19 +43,22 @@ a {
 button {
   all: unset;
 }
-.cta-primary {
+.cta {
   padding: var(--spacing-medium) var(--spacing-large);
+  font-weight: 900;
+}
+.cta:hover {
+  cursor: pointer;
+}
+.cta-primary {
   background-color: var(--color-pink);
   border-radius: var(--rounded);
   color: var(--color-white);
-  font-weight: 900;
 }
 .cta-secondary {
-  padding: var(--spacing-medium) var(--spacing-large);
   background-color: var(--color-white);
   color: var(--color-pink);
   border-radius: var(--rounded);
-  font-weight: 900;
 }
 .row {
   display: flex;
@@ -82,12 +85,12 @@ button {
 .hero-container > h2 {
   font-size: 40px;
 }
-.product-container {
+.hero-wrapper {
   position: relative;
   height: 400px;
   width: 100vw;
 }
-.product-container > img {
+.hero-wrapper > img {
   position: absolute;
   inset: 0;
   z-index: -1;
