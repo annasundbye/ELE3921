@@ -7,6 +7,7 @@
   --color-pink: rgb(255, 150, 213);
   --color-white: white;
   --color-turqoise: rgb(112, 252, 243);
+  --color-light-turqoise: rgb(197, 248, 244);
   --color-yellow: rgb(255, 253, 195);
   --spacing-small: 0.5rem;
   --spacing-medium: 0.75rem;
@@ -19,6 +20,9 @@ h2 {
   color: var(--color-white);
   font-family: "Bebas Neue", sans-serif;
 }
+.bebas-neue {
+  font-family: "Bebas Neue", sans-serif;
+}
 .header {
   position: sticky;
   top: 0;
@@ -29,13 +33,15 @@ h2 {
   align-items: center;
   padding: var(--spacing-small);
 }
+.page {
+  padding: var(--spacing-medium);
+}
 a {
   text-decoration: none;
   color: var(--color-white);
 }
 button {
-  outline: none;
-  border: none;
+  all: unset;
 }
 .cta-primary {
   padding: var(--spacing-medium) var(--spacing-large);
@@ -76,12 +82,12 @@ button {
 .hero-container > h2 {
   font-size: 40px;
 }
-.pizza-container {
+.product-container {
   position: relative;
   height: 400px;
   width: 100vw;
 }
-.pizza-container > img {
+.product-container > img {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -102,25 +108,24 @@ button {
   color: var(--color-white);
   font-weight: 900;
 }
-.pizza-grid {
+.product-grid {
   display: grid;
   grid-template-columns: repeat(3, 400px);
   gap: var(--spacing-large);
   padding: var(--spacing-large);
   height: 100%;
 }
-.pizza-card {
+.product-card {
   display: flex;
   flex-direction: column;
-  background-color: var(--color-yellow);
   border-radius: var(--rounded);
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
 }
-.pizza-card > .emoji {
+.product-card > .emoji {
   width: 100%;
   height: 100px;
 }
-.pizza-card > .description {
+.product-card > .description {
   background-color: var(--color-white);
   border-bottom-right-radius: var(--rounded);
   border-bottom-left-radius: var(--rounded);
@@ -132,12 +137,12 @@ button {
   height: 184px;
   padding: var(--spacing-large);
 }
-.pizza-card > .description > div > h3 {
+.product-card > .description > div > h3 {
   color: var(--color-pink);
   font-family: "Bebas Neue" sans-serif;
   margin-bottom: var(--spacing-small);
 }
-.pizza-card > .description > div > .price {
+.product-card > .description > div > .price {
   color: var(--color-turqoise);
   font-weight: 900;
   margin-top: var(--spacing-small);
@@ -147,6 +152,68 @@ button {
 }
 .w-full {
   width: 100%;
+}
+.w-fit {
+  width: fit-content;
+}
+.hamburger-menu {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 8px;
+}
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 150px;
+  z-index: 100;
+}
+.hamburger-menu {
+  color: var(--color-white);
+}
+.dropdown-menu a {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  color: black;
+}
+.dropdown-menu a:hover {
+  background-color: #f2f2f2;
+}
+.hidden {
+  display: none;
+}
+.bg-yellow {
+  background-color: var(--color-yellow);
+}
+.bg-turqoise {
+  background-color: var(--color-light-turqoise);
+}
+.bg-pink {
+  background-color: var(--color-pink);
+}
+.text-yellow {
+  color: var(--color-yellow);
+}
+.text-turqoise {
+  color: var(--color-turqoise);
+}
+.text-pink {
+  color: var(--color-pink);
+}
+.text-black {
+  color: var(--color-black);
 }
 @keyframes wiggle {
   0% {

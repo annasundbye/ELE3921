@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Pizza
+from .models import Pizza, Drink
 
 # mocking the pizzas for now.
 # will get them from the database.
@@ -12,6 +12,17 @@ fake_pizzas = [
    Pizza(name="All the good stuff (Hella meat)", base_price=319.99, icon="🥩", description="Hella meat."),
 ]
 
-# Create your views here.
-def index(request):
-   return render(request, "home.html", {"pizzas": fake_pizzas})
+drinks = [
+   Drink(name="Orange juice", price=39.99, icon="🍊"),
+   Drink(name="Lemonade", price=59.99, icon="🍋"),
+   Drink(name="Ice Tea", price=45.99, icon="🌱"),
+   Drink(name="Coca Cola", price=49.99, icon="🥤"),
+   Drink(name="Water", price=49.99, icon="💦"),
+   Drink(name="Sparkling Water", price=49.99, icon="🫧"),
+]
+
+def home(request):
+   return render(request, "home.html", {"pizzas": fake_pizzas[:3]})
+
+def menu(request):
+   return render(request, "menu.html", {"pizzas": fake_pizzas, "drinks": drinks})
