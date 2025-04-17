@@ -24,18 +24,8 @@
 </div>
 
 <div class="product-grid center">
-  {% for pizza in pizzas %}
-  <div class="product-card bg-yellow">
-    <div class="emoji center">{{ pizza.icon }}</div>
-    <div class="description">
-      <div>
-        <h3>{{ pizza.name }}</h3>
-        <p>{{ pizza.description }}</p>
-        <p class="price">{{ pizza.base_price }} kr</p>
-      </div>
-      <button class="cta cta-primary w-fit">add to cart</button>
-    </div>
-  </div>
-  {% endfor %}
+  {% for pizza in pizzas %} {% include "components/pizza-card.html" %}
+  {%endfor%}
 </div>
+
 {% endblock %}

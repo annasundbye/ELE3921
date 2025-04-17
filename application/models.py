@@ -12,6 +12,7 @@ class Size(models.Model):
 class Topping(models.Model):
     """The different kinds of topping on a pizza."""
     name = models.CharField(max_length=50)
+    icon = models.CharField(max_length=50, default="")
     
     def __str__(self):
         return self.name

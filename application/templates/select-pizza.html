@@ -1,5 +1,48 @@
-{% block content %}
-<div>
-  <h1>{{pizza.name}}</h1>
+{% extends "layout.html" %} {% block content %}
+<div class="col center">
+  <h1 class="text-black bebas-neue">{{pizza.name}}{{pizza.icon}}</h1>
+  <div class="row padding-small">
+    <button id="sub">{% include "components/minus-icon.html" %}</button>
+    <p id="quantity" style="cursor: pointer">1</p>
+    <input
+      id="custom-quantity"
+      type="text"
+      name="custom-quantity"
+      class="hidden"
+      style="width: 5ch"
+    />
+    <button id="add">{% include "components/plus-icon.html" %}</button>
+  </div>
+  <div>
+    <select name="pizza-size" id="select-pizza-size">
+      <option value="small">Small</option>
+      <option value="medium">Medium</option>
+      <option value="large">Large</option>
+    </select>
+  </div>
+  <div>Remove stuff here</div>
+  <div>
+    <h2 class="text-black">Toppings here</h2>
+
+    <ul>
+      {% for topping in toppings %}
+      <li>
+        {{ topping.name }} {% if topping in pizza.available_toppings.all %} ✅
+        {% else %} ❌ {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h2 class="text-black">Drinks here</h2>
+
+    <ul>
+      {% for drink in drinks %}
+      <li>{{drink.name}}</li>
+      {%endfor%}
+    </ul>
+  </div>
+  <button class="cta cta-primary">add to cart</button>
 </div>
+<script src="/static/js/add-to-cart.js"></script>
 {% endblock %}

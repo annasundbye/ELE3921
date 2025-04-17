@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Pizza, Drink
+from .models import Pizza, Drink, Topping
 
 def home(request):
    all_pizzas = Pizza.objects.all()
@@ -13,4 +13,11 @@ def menu(request):
 
 def select_pizza(request, pizza_id):
    pizza = Pizza.objects.get(id=pizza_id)
-   return render(request, "select-pizza.html", {"pizza": pizza})
+   drinks = Drink.objects.all()
+   toppings = Topping.objects.all()
+   
+   return render(request, "select-pizza.html", {
+      "pizza": pizza, 
+      "drinks": drinks, 
+      "toppings": toppings
+   })
