@@ -1,0 +1,25 @@
+{% extends "layout.html" %} {% block content %}
+<div class="page">
+    <h1 class="text-turqoise center">Sign In</h1>
+
+    <form action="/login" method="POST" class="col center">
+        {% csrf_token %}
+        <div class="col">
+            <label for="username">Username yo</label>
+            <input name="username" type="text" placeholder="johndoe" required>
+        </div>
+
+        <div class="col">
+            <label for="password">Password</label>
+            <input name="password" type="password" placeholder="supersecret123" required>
+        </div>
+
+        <div class="col">
+            <button type="submit" class="cta cta-primary">Sign in</button>
+            <p class="center">Don't have an account yet?? <a href="#" class="text-black" style="margin-left: 5px;">Sign
+                    up</a></p>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -4,6 +4,7 @@
   font-family: "Quicksand", sans-serif;
 }
 :root {
+  --color-purple: rgb(255, 243, 254);
   --color-pink: rgb(255, 150, 213);
   --color-white: white;
   --color-turqoise: rgb(112, 252, 243);
@@ -14,6 +15,9 @@
   --spacing-large: 1.5rem;
   --rounded: 35px;
   --rounded-full: 50%;
+}
+main {
+  background-color: var(--color-purple);
 }
 h1,
 h2 {
@@ -94,7 +98,6 @@ button {
 .hero-wrapper > img {
   position: absolute;
   inset: 0;
-  z-index: -1;
   height: 100%;
   width: 100%;
   object-fit: cover;
