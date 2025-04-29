@@ -8,4 +8,5 @@ urlpatterns = [
     path("menu/select-pizza/<int:pizza_id>/", views.select_pizza, name="select-pizza"),
     path("login", views.login, name="login"),
     # path("signup", views.signup, name="signup"),
+    path("cart", views.cart, name="cart")
 ]

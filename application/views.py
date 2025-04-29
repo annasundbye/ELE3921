@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Pizza, Drink, Topping, User
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth import authenticate, login as auth_login
 
 def home(request):
    all_pizzas = Pizza.objects.all()
@@ -23,28 +23,31 @@ def select_pizza(request, pizza_id):
       "toppings": toppings
    })
 
-def get_user_by_username(username):
-    try:
-        user = User.objects.get(username=username)
-        return user
-    except User.DoesNotExist:
-        return None
-
 def login(request):
    if request.method == "POST":
       username = request.POST.get("username")
       password = request.POST.get("password")
-      print("LOGGED IN USER", username, password)
+      
+      user = authenticate(request, username=username, password=password)
 
-      user = get_user_by_username(username)
-      if user is None:
+      if user is not None:
+         auth_login(request, user) 
+         print("User logged in:", user.username)
+         return redirect("/")
+      else:
          print("You shall not pass!!!")
-         return render(request, "login.html")
-      
-      if not check_password(password, user.password):
-         print("You shall not pass!!!")
-         return render(request, "login.html")
-      
-      return redirect("/")
+         return render(request, "login.html", {"error": "Invalid credentials."})
 
    return render(request, "login.html")
+
+def cart(request):
+   if request.method == "POST":
+      if not request.user.is_authenticated:
+         return redirect("/login")
+      
+      # do more stuff here later
+      
+      return render(request, "cart.html")
+      
+   if request.method == "GET":
+      return render(request, "cart.html")

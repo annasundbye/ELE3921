@@ -4,7 +4,7 @@
   font-family: "Quicksand", sans-serif;
 }
 :root {
-  --color-purple: rgb(255, 243, 254);
+  --color-purple: rgb(254, 250, 254);
   --color-pink: rgb(255, 150, 213);
   --color-white: white;
   --color-turqoise: rgb(112, 252, 243);
@@ -224,6 +224,9 @@ button {
 }
 .text-black {
   color: var(--color-black);
+}
+.text-white {
+  color: var(--color-white);
 }
 
 .padding-small {

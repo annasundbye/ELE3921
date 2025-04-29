@@ -1,5 +1,6 @@
 {% extends "layout.html" %} {% block content %}
-<div class="col center">
+<form method="post" action="/cart" class="col center">
+  {% csrf_token %}
   <h1 class="text-black bebas-neue">{{pizza.name}}{{pizza.icon}}</h1>
   <div class="row padding-small">
     <button id="sub">{% include "components/minus-icon.html" %}</button>
@@ -42,7 +43,7 @@
       {%endfor%}
     </ul>
   </div>
-  <button class="cta cta-primary">add to cart</button>
-</div>
+  <button type="submit" class="cta cta-primary">add to cart</button>
+</form>
 <script src="/static/js/add-to-cart.js"></script>
 {% endblock %}
