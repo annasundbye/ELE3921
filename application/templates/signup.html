@@ -1,12 +1,30 @@
 {% extends "layout.html" %} {% block content %}
 <div class="page">
-  <h1 class="text-turqoise center">Sign In</h1>
+  <h1 class="text-turqoise center">Sign Up</h1>
 
-  <form action="/login" method="POST" class="col center">
+  <form action="/signup" method="POST" class="col center">
     {% csrf_token %}
+    <div class="col">
+      <label for="firstname">First name</label>
+      <input name="firstname" type="text" placeholder="Mamma" required />
+    </div>
+    <div class="col">
+      <label for="lastname">Last name</label>
+      <input name="lastname" type="text" placeholder="Mia" required />
+    </div>
     <div class="col">
       <label for="username">Username yo</label>
       <input name="username" type="text" placeholder="mammamia" required />
+    </div>
+
+    <div class="col">
+      <label for="email">Email</label>
+      <input
+        name="email"
+        type="text"
+        placeholder="mammamia@pizza.com"
+        required
+      />
     </div>
 
     <div class="col">
@@ -20,7 +38,7 @@
     </div>
 
     <div class="col">
-      <button type="submit" class="cta cta-primary">Sign in</button>
+      <button type="submit" class="cta cta-primary">Sign up</button>
       <p class="center">
         Don't have an account yet??
         <a
