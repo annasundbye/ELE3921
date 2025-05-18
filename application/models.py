@@ -75,6 +75,8 @@ class CartItem(models.Model):
     def __str__(self):
         return f"CartItem ({self.pizza or self.drink}) x{self.quantity}"
 
+
+# an order is basically a cart, but checked out / payed for
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

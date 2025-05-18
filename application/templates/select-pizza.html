@@ -3,19 +3,20 @@
   {% csrf_token %}
   <h1 class="text-black bebas-neue">{{pizza.name}}{{pizza.icon}}</h1>
   <div class="row padding-small">
-    <button id="sub">{% include "components/minus-icon.html" %}</button>
+    <button id="sub" type="button">
+      {% include "components/minus-icon.html" %}
+    </button>
     <p id="quantity" style="cursor: pointer">1</p>
-    <input
-      id="custom-quantity"
-      type="text"
-      name="custom-quantity"
-      class="hidden"
-      style="width: 5ch"
-    />
-    <button id="add">{% include "components/plus-icon.html" %}</button>
+    <input id="custom-quantity" type="text" class="hidden" style="width: 5ch" />
+
+    <input type="hidden" id="final-quantity" name="quantity" value="1" />
+
+    <button id="add" type="button">
+      {% include "components/plus-icon.html" %}
+    </button>
   </div>
   <div>
-    <select name="pizza-size" id="select-pizza-size">
+    <select name="size" id="select-pizza-size">
       <option value="small">Small</option>
       <option value="medium">Medium</option>
       <option value="large">Large</option>
@@ -25,14 +26,22 @@
   <div>
     <h2 class="text-black">Toppings here</h2>
 
-    <ul>
+    <ul id="topping-list">
       {% for topping in toppings %}
-      <li>
-        {{ topping.name }} {% if topping in pizza.available_toppings.all %} ✅
-        {% else %} ❌ {% endif %}
+      <li
+        id="{{ topping.id }}"
+        class="topping-option"
+        data-id="{{ topping.id }}"
+        data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
+      >
+        {{ topping.name }} {% if topping.id in available_topping_ids %} ✅
+        {%else %} ❌ {% endif %}
       </li>
       {% endfor %}
     </ul>
+
+    <input type="hidden" name="extra-toppings" id="extra-toppings" />
+    <input type="hidden" name="pizza-id" id="pizza-id" value="{{ pizza.id }}" />
   </div>
   <div>
     <h2 class="text-black">Drinks here</h2>

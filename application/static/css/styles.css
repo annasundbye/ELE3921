@@ -189,7 +189,8 @@ button {
 .hamburger-menu {
   color: var(--color-white);
 }
-.dropdown-menu a {
+.dropdown-menu a,
+form {
   display: block;
   padding: 0.5rem 1rem;
   text-decoration: none;
@@ -247,6 +248,24 @@ button {
 .rounded-icon > i {
   scale: 0.65;
   color: var(--color-white);
+}
+.cart-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px solid var(--color-yellow);
+  border-radius: 20px;
+  background-color: #fdfdfd;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 1rem auto 1rem auto;
+  height: 30rem;
+  width: 30rem;
+  overflow: hidden;
+}
+.cart-header {
+  background-color: var(--color-yellow);
+  padding: 2rem 2rem;
+  width: 100%;
 }
 @keyframes wiggle {
   0% {

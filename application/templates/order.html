@@ -1,0 +1,12 @@
+{% extends "layout.html" %} {% block content %}
+<div class="page">
+  <h1 class="text-black">Order Confirmation</h1>
+
+  <div class="col">
+    <p>{{message}}</p>
+
+    <a href="{% url 'application:home' %}" class="cta cta-primary">Go home</a>
+  </div>
+</div>
+
+{% endblock %}

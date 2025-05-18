@@ -1,5 +1,45 @@
 {% extends "layout.html" %} {% block content %}
 
-<div>cart</div>
+<div class="page">
+  <h1 class="text-turqoise center">Cart</h1>
+  <h2 class="center" style="color: var(--color-turqoise); font-weight: 800">
+    Here are the items in your cart. Review your order before checkout.
+  </h2>
+  {% if cart %}
+  <div class="cart-box">
+    <div class="cart-header center">
+      <h2 class="text-black">{{cart.user.username}}'s order</h2>
+    </div>
+    <div>
+      <div>
+        {% for item in items %}
+        <div>
+          {{item.pizza.pizza.icon}} {{item.pizza.pizza.name}}
+          {{item.pizza.size.name}} x{{item.quantity}}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <form
+      method="post"
+      action="/order"
+      style="margin-top: auto; margin-bottom: 1rem"
+      class="center col"
+    >
+      {% csrf_token %}
+      <p>Total price: {{cart.total_price}},-</p>
+      <button class="cta cta-primary">Checkout</button>
+    </form>
+  </div>
+  {% else %}
+  <div class="col">
+    <p>No items in your cart</p>
+    <a href="{% url 'application:menu' %}" class="cta cta-primary"
+      >See the menu</a
+    >
+  </div>
+  {% endif %}
+</div>
 
 {% endblock %}
