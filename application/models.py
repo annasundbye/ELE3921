@@ -13,6 +13,7 @@ class Topping(models.Model):
     """The different kinds of topping on a pizza."""
     name = models.CharField(max_length=50)
     icon = models.CharField(max_length=50, default="")
+    base_price = models.DecimalField(max_digits=6, decimal_places=2, default=15.00)
     
     def __str__(self):
         return self.name
@@ -69,7 +70,7 @@ class CartItem(models.Model):
     
     def total_price(self):
         base_price = self.pizza.price if self.pizza else self.drink.price
-        topping_cost = sum(t.price for t in self.toppings.all())
+        topping_cost = sum(t.base_price for t in self.toppings.all())
         return (base_price + topping_cost) * self.quantity
 
     def __str__(self):

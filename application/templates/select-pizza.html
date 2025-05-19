@@ -1,7 +1,11 @@
 {% extends "layout.html" %} {% block content %}
 <form method="post" action="/cart" class="col center">
   {% csrf_token %}
-  <h1 class="text-black bebas-neue">{{pizza.name}}{{pizza.icon}}</h1>
+
+  <h1 class="text-black bebas-neue">{{ pizza.name }} {{ pizza.icon }}</h1>
+
+  <p>{{ pizza.base_price }},-</p>
+
   <div class="row padding-small">
     <button id="sub" type="button">
       {% include "components/minus-icon.html" %}
@@ -22,37 +26,72 @@
       <option value="large">Large</option>
     </select>
   </div>
-  <div>Remove stuff here</div>
-  <div>
-    <h2 class="text-black">Toppings here</h2>
 
-    <ul id="topping-list">
-      {% for topping in toppings %}
-      <li
-        id="{{ topping.id }}"
-        class="topping-option"
-        data-id="{{ topping.id }}"
-        data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
-      >
-        {{ topping.name }} {% if topping.id in available_topping_ids %} ✅
-        {%else %} ❌ {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
+  <div class="col">
+    <h2 class="text-black">Toppings</h2>
+    <p>Choose from a variety of <i>delicious</i> toppings 😩</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Topping</th>
+          <th>Price</th>
+          <th>Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for topping in toppings %}
+        <tr
+          id="{{ topping.id }}"
+          class="topping-option"
+          data-id="{{ topping.id }}"
+          data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
+          style="cursor: pointer"
+        >
+          <td>{{ topping.icon }} {{ topping.name }}</td>
+          <td>{{ topping.base_price }},-</td>
+          <td>{% if topping.id in available_topping_ids %} ✅ {% endif %}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
 
     <input type="hidden" name="extra-toppings" id="extra-toppings" />
     <input type="hidden" name="pizza-id" id="pizza-id" value="{{ pizza.id }}" />
   </div>
-  <div>
+  <div class="col">
     <h2 class="text-black">Drinks here</h2>
+    <p>We got tasty dranks 😗</p>
 
-    <ul>
-      {% for drink in drinks %}
-      <li>{{drink.name}}</li>
-      {%endfor%}
-    </ul>
+    <table>
+      <thead>
+        <tr>
+          <th>Drink</th>
+          <th>Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for drink in drinks %}
+        <tr>
+          <td>{{ drink.icon }} {{ drink.name }}</td>
+          <td>{{ drink.price }},-</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <button type="submit" class="cta cta-primary">add to cart</button>
 </form>
 <script src="/static/js/add-to-cart.js"></script>
+<script>
+  function changeQuantity(button, change) {
+    const quantityInput = button.parentElement.querySelector(
+      'input[name="quantity"]'
+    );
+    let value = parseInt(quantityInput.value) || 1;
+    value = Math.max(1, value + change);
+    quantityInput.value = value;
+  }
+</script>
 {% endblock %}

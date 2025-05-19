@@ -15,10 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (selectedToppings.has(toppingId)) {
         selectedToppings.delete(toppingId);
-        el.style.backgroundColor = "";
+        el.innerHTML = el.innerHTML.replaceAll("✅", "");
       } else {
         selectedToppings.add(toppingId);
-        el.style.backgroundColor = "lightgreen";
+
+        // TODO: remove toppings
+        el.innerHTML += "✅";
       }
 
       extraToppingsInput.value = Array.from(selectedToppings).join(",");

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .models import Pizza, Drink, Topping, User, Cart, CartItem, Size, PizzaPrice, Order, OrderItem
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.http import HttpResponseBadRequest
 
 def home(request):
    all_pizzas = Pizza.objects.all()
@@ -74,6 +75,8 @@ def cart(request):
       quantity = request.POST.get("quantity")
       size = request.POST.get("size")
       extra_toppings = request.POST.get("extra-toppings")
+      if extra_toppings:
+         extra_toppings = extra_toppings.split(",")
       
       # get the pizza from the database
       pizza_id = request.POST.get("pizza-id")
@@ -87,7 +90,11 @@ def cart(request):
       
       # add to the cart (or create a new one)
       cart, _ = Cart.objects.get_or_create(user=request.user)
-      CartItem.objects.create(cart=cart, pizza=pizza_price, quantity=quantity)
+      cart_item = CartItem.objects.create(cart=cart, pizza=pizza_price, quantity=quantity)
+      
+      if extra_toppings:
+         toppings_in_db = Topping.objects.filter(id__in=extra_toppings)
+         cart_item.toppings.set(toppings_in_db)
       
       # show the cart
       return redirect("/cart")
@@ -106,6 +113,19 @@ def cart(request):
       print(item)
    
    return render(request, "cart.html", {"cart": cart, "items": items})
+
+def delete_cart_item(request):
+   if request.method == "POST":
+        cart_item_id = request.POST.get("id")
+
+        try:
+            cart_item = CartItem.objects.get(id=cart_item_id, cart__user=request.user)
+        except CartItem.DoesNotExist:
+            return HttpResponseBadRequest("Bro dont try to delete another bro's mukbang, dude.")
+
+        cart_item.delete()
+        return redirect("/cart")
+
 
 def order(request):
    if request.method == "POST":

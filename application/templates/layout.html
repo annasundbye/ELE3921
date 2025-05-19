@@ -59,15 +59,15 @@
         <a href="{% url 'application:login' %}">Sign in</a>
         {% endif %}
         <a class="cta cta-secondary row" href="{% url 'application:cart' %}"
-          >🛒 <span class="cart-counter">0</span>
+          >🛒
         </a>
       </nav>
     </header>
 
     <main>{% block content %} {% endblock %}</main>
 
-    <footer>
-      <p>&copy; 2025 My Site</p>
+    <footer style="padding: 1rem" class="center bg-purple">
+      <p>&copy; 2025 Crust Issues 🌸</p>
     </footer>
   </body>
 </html>

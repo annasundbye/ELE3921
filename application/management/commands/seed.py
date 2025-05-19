@@ -2,20 +2,20 @@ from django.core.management.base import BaseCommand
 from application.models import Pizza, Drink, Topping
 
 DEFAULT_TOPPINGS = [
-    Topping(name="Tomato Sauce", icon="🍅"),
-    Topping(name="Mozzarella", icon="🧀"),
-    Topping(name="Pepperoni", icon="🌶️"),
-    Topping(name="Nduja", icon="🔥"),
-    Topping(name="Parmesan", icon="🧂"),
-    Topping(name="Blue Cheese", icon="🔵"),
-    Topping(name="Gorgonzola", icon="💙"),
-    Topping(name="Vegan Cheese", icon="🌱"),
-    Topping(name="Bell Pepper", icon="🫑"),
-    Topping(name="Zucchini", icon="🥒"),
-    Topping(name="Mushroom", icon="🍄"),
-    Topping(name="Meat Mix", icon="🥩"),
-    Topping(name="Ham", icon="🐖"),
-    Topping(name="Bacon", icon="🥓"),
+    Topping(name="Tomato Sauce", icon="🍅", base_price=9.00),
+    Topping(name="Mozzarella", icon="🧀", base_price=15.00),
+    Topping(name="Pepperoni", icon="🌶️", base_price=25.00),
+    Topping(name="Nduja", icon="🔥", base_price=35.00),
+    Topping(name="Parmesan", icon="🧂", base_price=20.00),
+    Topping(name="Blue Cheese", icon="🔵", base_price=30.00),
+    Topping(name="Gorgonzola", icon="💙", base_price=35.00),
+    Topping(name="Vegan Cheese", icon="🌱", base_price=9.00),
+    Topping(name="Bell Pepper", icon="🫑", base_price=9.00),
+    Topping(name="Zucchini", icon="🥒", base_price=15.00),
+    Topping(name="Mushroom", icon="🍄", base_price=9.00),
+    Topping(name="Meat Mix", icon="🥩", base_price=40.00),
+    Topping(name="Ham", icon="🐖", base_price=30.00),
+    Topping(name="Bacon", icon="🥓", base_price=30.00),
 ]
 
 DEFAULT_PIZZAS = [

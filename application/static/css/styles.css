@@ -39,6 +39,7 @@ h2 {
 }
 .page {
   padding: var(--spacing-medium);
+  min-height: 100vh;
 }
 a {
   text-decoration: none;
@@ -213,6 +214,9 @@ form {
 }
 .bg-turqoise {
   background-color: var(--color-turqoise);
+}
+.bg-purple {
+  background-color: var(--color-purple);
 }
 .text-yellow {
   color: var(--color-yellow);
