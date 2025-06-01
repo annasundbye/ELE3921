@@ -1,88 +1,109 @@
 {% extends "layout.html" %} {% block content %}
-<form method="post" action="/cart" class="col center">
-  {% csrf_token %}
+<div class="page">
+  <button class="row text-pink" onclick="window.history.go(-1);">
+    <i class="fa-solid fa-arrow-left"></i>go back
+  </button>
+  <form method="post" action="/cart" class="col center">
+    {% csrf_token %}
 
-  <h1 class="text-black bebas-neue">{{ pizza.name }} {{ pizza.icon }}</h1>
+    <h1 class="text-black bebas-neue">{{ pizza.name }} {{ pizza.icon }}</h1>
 
-  <p>{{ pizza.base_price }},-</p>
+    <p>{{ pizza.base_price }},-</p>
 
-  <div class="row padding-small">
-    <button id="sub" type="button">
-      {% include "components/minus-icon.html" %}
-    </button>
-    <p id="quantity" style="cursor: pointer">1</p>
-    <input id="custom-quantity" type="text" class="hidden" style="width: 5ch" />
+    <div class="row padding-small">
+      <button id="sub" type="button">
+        {% include "components/minus-icon.html" %}
+      </button>
+      <p id="quantity" style="cursor: pointer">1</p>
+      <input
+        id="custom-quantity"
+        type="text"
+        class="hidden"
+        style="width: 5ch"
+      />
 
-    <input type="hidden" id="final-quantity" name="quantity" value="1" />
+      <input type="hidden" id="final-quantity" name="quantity" value="1" />
 
-    <button id="add" type="button">
-      {% include "components/plus-icon.html" %}
-    </button>
-  </div>
-  <div>
-    <select name="size" id="select-pizza-size">
-      <option value="small">Small</option>
-      <option value="medium">Medium</option>
-      <option value="large">Large</option>
-    </select>
-  </div>
+      <button id="add" type="button">
+        {% include "components/plus-icon.html" %}
+      </button>
+    </div>
+    <div>
+      <select name="size" id="select-pizza-size">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+    </div>
 
-  <div class="col">
-    <h2 class="text-black">Toppings</h2>
-    <p>Choose from a variety of <i>delicious</i> toppings 😩</p>
+    <div class="col">
+      <h2 class="text-black">Toppings</h2>
+      <p>Choose from a variety of <i>delicious</i> toppings 😩</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Topping</th>
-          <th>Price</th>
-          <th>Added</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for topping in toppings %}
-        <tr
-          id="{{ topping.id }}"
-          class="topping-option"
-          data-id="{{ topping.id }}"
-          data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
-          style="cursor: pointer"
-        >
-          <td>{{ topping.icon }} {{ topping.name }}</td>
-          <td>{{ topping.base_price }},-</td>
-          <td>{% if topping.id in available_topping_ids %} ✅ {% endif %}</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+      <table>
+        <thead>
+          <tr>
+            <th>Topping</th>
+            <th>Price</th>
+            <th>Added</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for topping in toppings %}
+          <tr
+            id="{{ topping.id }}"
+            class="topping-option"
+            data-id="{{ topping.id }}"
+            data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
+            style="cursor: pointer"
+          >
+            <td>{{ topping.icon }} {{ topping.name }}</td>
+            <td>{{ topping.base_price }},-</td>
+            <td>{% if topping.id in available_topping_ids %} ✅ {% endif %}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
 
-    <input type="hidden" name="extra-toppings" id="extra-toppings" />
-    <input type="hidden" name="pizza-id" id="pizza-id" value="{{ pizza.id }}" />
-  </div>
-  <div class="col">
-    <h2 class="text-black">Drinks here</h2>
-    <p>We got tasty dranks 😗</p>
+      <input type="hidden" name="extra-toppings" id="extra-toppings" />
+      <input
+        type="hidden"
+        name="pizza-id"
+        id="pizza-id"
+        value="{{ pizza.id }}"
+      />
+    </div>
+    <div class="col">
+      <h2 class="text-black">Drinks here</h2>
+      <p>We got tasty dranks 😗</p>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Drink</th>
-          <th>Price</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for drink in drinks %}
-        <tr>
-          <td>{{ drink.icon }} {{ drink.name }}</td>
-          <td>{{ drink.price }},-</td>
-        </tr>
+      <table>
+        <thead>
+          <tr>
+            <th>Drink</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for drink in drinks %}
+          <tr
+            id="{{ drink.id }}"
+            data-id="{{ drink.id }}"
+            class="drink-option"
+            style="cursor: pointer"
+          >
+            <td>{{ drink.icon }} {{ drink.name }}</td>
+            <td>{{ drink.price }},-</td>
+          </tr>
 
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  <button type="submit" class="cta cta-primary">add to cart</button>
-</form>
+          {% endfor %}
+        </tbody>
+      </table>
+      <input type="hidden" name="drink-id" id="drink-id" />
+    </div>
+    <button type="submit" class="cta cta-primary">add to cart</button>
+  </form>
+</div>
 <script src="/static/js/add-to-cart.js"></script>
 <script>
   function changeQuantity(button, change) {

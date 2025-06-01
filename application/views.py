@@ -17,12 +17,14 @@ def select_pizza(request, pizza_id):
    pizza = Pizza.objects.get(id=pizza_id)
    drinks = Drink.objects.all()
    toppings = Topping.objects.all()
+   sizes = Size.objects.all()
    available_topping_ids = pizza.available_toppings.values_list('id', flat=True)
    
    return render(request, "select-pizza.html", {
       "pizza": pizza, 
       "drinks": drinks, 
       "toppings": toppings,
+      "sizes": sizes,
       "available_topping_ids": set(available_topping_ids),
    })
 
@@ -62,7 +64,12 @@ def signup(request):
 def logout(request):
    auth_logout(request)
    return redirect("/")
-      
+
+def profile(request):
+   if not request.user.is_authenticated:
+      return redirect("/login")
+   
+   return render (request, "profile.html")
 
 def cart(request):
    # handle add to cart
@@ -82,6 +89,14 @@ def cart(request):
       pizza_id = request.POST.get("pizza-id")
       pizza = Pizza.objects.get(id=pizza_id)
       
+      # do the same with drink if it is added
+      drink_id = request.POST.get("drink-id")
+      drink = None # default
+      if drink_id:
+         drink = Drink.objects.get(id=drink_id)
+         
+      print("DRINK", drink, drink_id)
+      
       # get the size from the database
       size = Size.objects.get(name=size)
       
@@ -90,7 +105,7 @@ def cart(request):
       
       # add to the cart (or create a new one)
       cart, _ = Cart.objects.get_or_create(user=request.user)
-      cart_item = CartItem.objects.create(cart=cart, pizza=pizza_price, quantity=quantity)
+      cart_item = CartItem.objects.create(cart=cart, pizza=pizza_price, quantity=quantity, drink=drink)
       
       if extra_toppings:
          toppings_in_db = Topping.objects.filter(id__in=extra_toppings)
@@ -157,4 +172,15 @@ def order(request):
       return redirect("/order")
    
    return render(request, "order.html", {"message": "Thank you for your order"})
-      
+
+def past_orders(request):
+    if not request.user.is_authenticated:
+        return redirect("/login")
+    
+    orders = (
+        Order.objects.filter(user=request.user)
+        .prefetch_related("orderitems__pizza", "orderitems__drink", "orderitems__toppings")
+        .order_by("-created_at")
+    )
+    
+    return render(request, "past-orders.html", {"orders": orders})

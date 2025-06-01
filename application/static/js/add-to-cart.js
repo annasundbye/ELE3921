@@ -27,6 +27,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // drink
+  const drinkElements = document.querySelectorAll(".drink-option");
+  const drinkIdInput = document.getElementById("drink-id");
+  drinkElements.forEach((el) => {
+    el.addEventListener("click", () => {
+      const drinkId = el.dataset.id;
+      console.log(drinkId, "drink");
+      drinkIdInput.value = drinkId;
+    });
+  });
+
   function syncFinalQuantity() {
     finalQuantity.value = quantity.innerText;
   }
