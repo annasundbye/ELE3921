@@ -4,18 +4,18 @@ from django.contrib.auth import authenticate, login as auth_login, logout as aut
 from django.http import HttpResponseBadRequest
 
 def home(request):
-   all_pizzas = Pizza.objects.all()
+   all_pizzas = Pizza.objects.filter(available=True)
    
    return render(request, "home.html", {"pizzas": all_pizzas})
 
 def menu(request):
-   all_pizzas = Pizza.objects.all()
-   all_drinks = Drink.objects.all()
+   all_pizzas = Pizza.objects.filter(available=True)
+   all_drinks = Drink.objects.filter(available=True)
    return render(request, "menu.html", {"pizzas": all_pizzas, "drinks": all_drinks})
 
 def select_pizza(request, pizza_id):
    pizza = Pizza.objects.get(id=pizza_id)
-   drinks = Drink.objects.all()
+   drinks = Drink.objects.filter(available=True)
    toppings = Topping.objects.all()
    sizes = Size.objects.all()
    available_topping_ids = pizza.available_toppings.values_list('id', flat=True)

@@ -27,6 +27,7 @@ class Pizza(models.Model):
     available_toppings = models.ManyToManyField(Topping, blank=True)
     icon = models.CharField(max_length=255)
     description = models.CharField(max_length=100)
+    available = models.BooleanField(default=True, db_index=True)
     
     def __str__(self):
         return self.name
@@ -47,6 +48,7 @@ class Drink(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
     icon = models.CharField(max_length=255)
     description = models.CharField(max_length=100)
+    available = models.BooleanField(default=True, db_index=True)
     
     def __str__(self):
         return self.name
@@ -63,15 +65,27 @@ class Cart(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(Cart, related_name='cartitems', on_delete=models.CASCADE)
-    pizza = models.ForeignKey(PizzaPrice, null=True, blank=True, on_delete=models.CASCADE)
-    drink = models.ForeignKey(Drink, null=True, blank=True, on_delete=models.CASCADE)
+    pizza = models.ForeignKey(PizzaPrice, null=True, blank=True, on_delete=models.PROTECT)
+    drink = models.ForeignKey(Drink, null=True, blank=True, on_delete=models.PROTECT)
     toppings = models.ManyToManyField(Topping, blank=True)
     quantity = models.PositiveIntegerField(default=1)
     
     def total_price(self):
-        base_price = self.pizza.price if self.pizza else self.drink.price
-        topping_cost = sum(t.base_price for t in self.toppings.all())
-        return (base_price + topping_cost) * self.quantity
+        base_price = self.pizza.price if self.pizza else (self.drink.price if self.drink else 0)
+        topping_cost = 0
+
+        if self.pizza:
+            size_name = self.pizza.size.name.lower()
+            multiplier = {
+                "small": 1.0,
+                "medium": 1.25,
+                "large": 1.5,
+            }.get(size_name, 1.0)
+
+            for topping in self.toppings.all():
+                topping_cost += topping.base_price * multiplier
+
+        return (base_price + topping_cost) * int(self.quantity)
 
     def __str__(self):
         return f"CartItem ({self.pizza or self.drink}) x{self.quantity}"
@@ -94,9 +108,22 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     
     def total_price(self):
-        base_price = self.pizza.price if self.pizza else self.drink.price
-        topping_cost = sum(t.price for t in self.toppings.all())
-        return (base_price + topping_cost) * self.quantity
+        base_price = self.pizza.price if self.pizza else (self.drink.price if self.drink else 0)
+        topping_cost = 0
+
+        if self.pizza:
+            size_name = self.pizza.size.name.lower()
+            multiplier = {
+                "small": 1.0,
+                "medium": 1.25,
+                "large": 1.5,
+            }.get(size_name, 1.0)
+
+            for topping in self.toppings.all():
+                topping_cost += topping.base_price * multiplier
+
+        return (base_price + topping_cost) * int(self.quantity)
+
     
     def __str__(self):
         return f"OrderItem ({self.pizza or self.drink}) x{self.quantity}"
