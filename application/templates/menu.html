@@ -8,14 +8,14 @@
     {%endfor %}
   </div>
 
+  {% comment %}
   <h2 class="text-pink center">Drinks</h2>
 
   <div class="product-grid center">
     {% for drink in drinks %} {% include "components/drink-card.html" %}
     {%endfor%}
   </div>
+  {% endcomment %}
 </div>
 
-{% comment %}
-<script src="/static/js/add-to-cart.js"></script>
-{% endcomment %} {% endblock %}
+{% endblock %}

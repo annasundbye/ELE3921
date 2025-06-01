@@ -1,0 +1,16 @@
+<button id="hamburger-button" class="hamburger-menu">
+  <i class="fa-solid fa-bars"></i>
+</button>
+<div class="dropdown-menu hidden" id="dropdown-menu">
+  <a href="{% url 'application:menu' %}">Menu</a>
+  {% if user.is_authenticated %}
+  <form method="post" action="/logout">
+    {% csrf_token %}
+    <button>Log out</button>
+  </form>
+  <a href="{% url 'application:past_orders' %}">Past orders</a>
+  {%else%}
+  <a href="{% url 'application:login' %}">Login</a>
+  {%endif%}
+</div>
+<script src="/static/js/dropdown-menu.js"></script>
