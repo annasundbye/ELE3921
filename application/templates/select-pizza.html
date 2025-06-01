@@ -54,12 +54,12 @@
             id="{{ topping.id }}"
             class="topping-option"
             data-id="{{ topping.id }}"
-            data-available="{% if topping.id in available_topping_ids %}true{% else %}false{% endif %}"
+            data-price="{{ topping.base_price }}"
             style="cursor: pointer"
           >
             <td>{{ topping.icon }} {{ topping.name }}</td>
-            <td>{{ topping.base_price }},-</td>
-            <td>{% if topping.id in available_topping_ids %} ✅ {% endif %}</td>
+            <td class="topping-price">{{ topping.base_price }},-</td>
+            <td></td>
           </tr>
           {% endfor %}
         </tbody>
