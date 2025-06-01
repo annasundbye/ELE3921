@@ -5,11 +5,13 @@ app_name = "application"
 urlpatterns = [
     path("", views.home, name="home"),
     path("menu", views.menu, name="menu"),
-    path("menu/select-pizza/<int:pizza_id>/", views.select_pizza, name="select-pizza"),
+    path("pizza/<int:pizza_id>/", views.select_pizza, name="select-pizza"),
     path("login", views.login, name="login"),
     path("signup", views.signup, name="signup"),
+    path("profile", views.profile, name="profile"),
     path("cart", views.cart, name="cart"),
     path("logout", views.logout, name="logout"),
     path("order", views.order, name="order"),
+    path("order/history", views.past_orders, name="past_orders"),
     path("cart/delete-item", views.delete_cart_item, name="delete-cart-item"),
 ]

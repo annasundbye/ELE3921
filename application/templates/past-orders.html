@@ -1,0 +1,28 @@
+{% extends "layout.html" %} {% block content %}
+<div class="page">
+  <h1>Your Past Orders</h1>
+
+  {% if orders %} {% for order in orders %}
+  <div class="order-card">
+    <h2>Order #{{ order.id }} – {{ order.created_at|date:"M d, Y H:i" }}</h2>
+    <p><strong>Total:</strong> {{ order.total_price }} NOK</p>
+    <ul>
+      {% for item in order.orderitems.all %}
+      <li class="order-item">
+        {% if item.pizza %} 🍕 <strong>{{ item.pizza.pizza.name }}</strong>
+        ({{ item.pizza.size }}) x{{ item.quantity }} {%if item.toppings.all%}
+        <br />
+
+        <em>Toppings:</em> {%for topping in item.toppings.all%} {{ topping.name
+        }}{% if not forloop.last %}, {% endif %} {% endfor %} {% endif %} {%
+        elif item.drink %} 🥤 <strong>{{ item.drink.name }}</strong> x{{
+        item.quantity }} {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endfor %} {% else %}
+  <p>You have no past orders yet.</p>
+  {% endif %}
+</div>
+{% endblock %}
