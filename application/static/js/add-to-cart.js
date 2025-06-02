@@ -1,19 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
   // Quantity Elements
   const quantityEl = document.getElementById("quantity");
-  const customQuantityEl = document.getElementById("custom-quantity");
-  const finalQuantityEl = document.getElementById("final-quantity");
 
   const sizeMultiplier = {
-    "small": 1.0,
-    "medium": 1.1,
-    "large": 1.2,
+    small: 1.0,
+    medium: 1.1,
+    large: 1.2,
     "x-large": 1.3,
-  }
+  };
 
   // State
   const selectedToppings = new Set();
-  let selectedSize = "medium"
+  let selectedSize = "medium";
   let selectedDrinkId = null;
 
   // Add hidden inputs for selected options
@@ -32,11 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
   drinkInput.id = "drink-id";
   form.appendChild(drinkInput);
 
-  // Handle Quantity Display
-  function syncFinalQuantity() {
-    finalQuantityEl.value = quantityEl.innerText;
-  }
-
   quantityEl.addEventListener("click", () => {
     customQuantityEl.value = quantityEl.innerText;
     quantityEl.classList.add("hidden");
@@ -44,26 +37,14 @@ document.addEventListener("DOMContentLoaded", () => {
     customQuantityEl.focus();
   });
 
-  customQuantityEl.addEventListener("change", () => {
-    const newVal = parseInt(customQuantityEl.value);
-    if (!isNaN(newVal) && newVal >= 1) {
-      quantityEl.innerText = newVal;
-    }
-    customQuantityEl.classList.add("hidden");
-    quantityEl.classList.remove("hidden");
-    syncFinalQuantity();
-  });
-
   document.getElementById("sub").addEventListener("click", () => {
     const qty = Math.max(1, parseInt(quantityEl.innerText) - 1);
     quantityEl.innerText = qty;
-    syncFinalQuantity();
   });
 
   document.getElementById("add").addEventListener("click", () => {
     const qty = parseInt(quantityEl.innerText) + 1;
     quantityEl.innerText = qty;
-    syncFinalQuantity();
   });
 
   function updateToppingPrices() {

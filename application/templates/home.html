@@ -14,10 +14,12 @@
 </div>
 
 <div class="text-center my-6">
-  <h2 class="bebas-neue text-pink" style="font-size: 36px">The menu</h2>
+  <h2 class="bebas-neue text-pink text-3xl">The menu</h2>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<div
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 container mx-auto max-w-7xl px-4"
+>
   {% for pizza in pizzas %} {% include "components/pizza-card.html" %}
   {%endfor%}
 </div>

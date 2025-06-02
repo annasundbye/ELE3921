@@ -1,8 +1,11 @@
 <a
   id="add-pizza-{{pizza.id}}"
   href="{% url 'application:select-pizza' pizza_id=pizza.id %}"
+  class="relative"
 >
-  <div class="flex flex-col rounded-xl shadow-sm bg-yellow">
+  <div
+    class="flex flex-col w-full rounded-xl shadow-sm bg-yellow hover:absolute hover:-translate-y-2 hover:shadow-xl transition-all duration-300"
+  >
     <div class="h-32 flex justify-center items-center">
       <figure class="text-5xl">{{ pizza.icon }}</figure>
     </div>

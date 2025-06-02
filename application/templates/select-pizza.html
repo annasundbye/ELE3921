@@ -34,6 +34,24 @@
           {% endfor %}
         </div>
       </div>
+
+      <div class="rounded-xl p-[var(--spacing-large)] bg-white">
+        <h3 class="text-pink mb-4 bebas-neue text-xl">add a drink</h3>
+        <div class="grid grid-cols-2 gap-3">
+          {% for drink in drinks %}
+          <button
+            type="button"
+            id="{{drink.id}}"
+            class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
+          >
+            <figure>{{drink.icon}}</figure>
+            <h4>{{drink.name}}</h4>
+            <div class="text-sm text-gray-600">{{drink.description}}</div>
+            <p class="text-[var(--color-turqoise)]">{{drink.price}},-</p>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
     </div>
 
     <div class="space-y-8">
@@ -78,23 +96,6 @@
           {% endfor %}
         </div>
       </div>
-
-      <div class="rounded-xl p-[var(--spacing-large)] bg-white">
-        <h3 class="text-pink mb-4 bebas-neue text-xl">add a drink</h3>
-        <div class="grid grid-cols-2 gap-3">
-          {% for drink in drinks %}
-          <button
-            type="button"
-            id="{{drink.id}}"
-            class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
-          >
-            <figure>{{drink.icon}}</figure>
-            <h4>{{drink.name}}</h4>
-            <p class="text-[var(--color-turqoise)]">{{drink.price}},-</p>
-          </button>
-          {% endfor %}
-        </div>
-      </div>
     </div>
   </div>
 
@@ -106,15 +107,6 @@
         {% include "components/minus-icon.html" %}
       </button>
       <p id="quantity" style="cursor: pointer">1</p>
-      <input
-        id="custom-quantity"
-        type="text"
-        class="hidden"
-        style="width: 5ch"
-      />
-
-      <input type="hidden" id="final-quantity" name="quantity" value="1" />
-
       <button id="add" type="button">
         {% include "components/plus-icon.html" %}
       </button>

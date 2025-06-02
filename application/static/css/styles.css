@@ -60,16 +60,25 @@ button {
   padding: var(--spacing-medium) var(--spacing-large);
   font-weight: 900;
   text-align: center;
+  border-radius: var(--rounded);
+  transition: all 0.2s ease-in-out;
 }
 .cta-primary {
   background-color: var(--color-pink);
-  border-radius: var(--rounded);
   color: var(--color-white);
 }
 .cta-secondary {
   background-color: var(--color-white);
+  color: var(--color-turqoise);
+}
+.cta-primary:hover {
+  background-color: var(--color-white);
   color: var(--color-pink);
-  border-radius: var(--rounded);
+  border: 1px solid var(--color-pink);
+}
+.cta-secondary:hover {
+  background-color: var(--color-turqoise);
+  color: var(--color-white);
 }
 .row {
   display: flex;

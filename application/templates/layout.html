@@ -37,7 +37,7 @@
   <body>
     <header class="header">
       <a href="{% url 'application:home' %}" class="bebas-neue">
-        <h1>Crust Issues</h1>
+        <h1 class="text-3xl">Crust Issues</h1>
         <p>pizza that slaps fr fr</p>
       </a>
 
@@ -47,7 +47,7 @@
           href="{% url 'application:profile' %}"
           style="color: var(--color-white); font-weight: 800"
         >
-          hey, {{ user.first_name }} ✌️
+          hey, {{ user.username }} ✌️
         </a>
         {% else %}
         <a href="{% url 'application:login' %}">sign in bestie</a>
