@@ -66,11 +66,12 @@
             type="button"
             id="extra-topping-{{topping.name}}"
             data-id="{{topping.id}}"
+            data-price="{{topping.base_price}}"
             class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
           >
             <figure>{{topping.icon}}</figure>
             <h4>{{topping.name}}</h4>
-            <p class="text-[var(--color-turqoise)]">
+            <p class="topping-price text-[var(--color-turqoise)]">
               +{{topping.base_price}},-
             </p>
           </button>

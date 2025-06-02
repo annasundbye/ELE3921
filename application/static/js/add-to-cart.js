@@ -4,8 +4,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const customQuantityEl = document.getElementById("custom-quantity");
   const finalQuantityEl = document.getElementById("final-quantity");
 
+  const sizeMultiplier = {
+    "small": 1.0,
+    "medium": 1.1,
+    "large": 1.2,
+    "x-large": 1.3,
+  }
+
   // State
   const selectedToppings = new Set();
+  let selectedSize = "medium"
   let selectedDrinkId = null;
 
   // Add hidden inputs for selected options
@@ -58,6 +66,20 @@ document.addEventListener("DOMContentLoaded", () => {
     syncFinalQuantity();
   });
 
+  function updateToppingPrices() {
+    const multiplier = sizeMultiplier[selectedSize];
+
+    document.querySelectorAll("[id^='extra-topping-']").forEach((btn) => {
+      const basePrice = parseFloat(btn.dataset.price);
+      const newPrice = Math.round(basePrice * multiplier * 100) / 100;
+      const pTag = btn.getElementsByClassName("topping-price")[0];
+
+      if (pTag) {
+        pTag.innerHTML = `+${newPrice.toFixed(2)},-`;
+      }
+    });
+  }
+
   // Select Size
   document.querySelectorAll("[id^='size-']").forEach((btn) => {
     btn.addEventListener("click", () => {
@@ -70,6 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       btn.classList.add("border-[var(--color-pink)]");
       btn.classList.remove("border-gray-300");
+
+      updateToppingPrices();
     });
   });
 
