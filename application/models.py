@@ -5,6 +5,8 @@ from django.db import models
 class Size(models.Model):
     """Pizza size. Can be small, medium or large."""
     name = models.CharField(max_length=10)
+    multiplier = models.DecimalField(max_digits=6, decimal_places=2, default=1.0)
+    description = models.CharField(max_length=50, default="")
     
     def __str__(self):
         return self.name
@@ -75,15 +77,8 @@ class CartItem(models.Model):
         topping_cost = 0
 
         if self.pizza:
-            size_name = self.pizza.size.name.lower()
-            multiplier = {
-                "small": 1.0,
-                "medium": 1.25,
-                "large": 1.5,
-            }.get(size_name, 1.0)
-
             for topping in self.toppings.all():
-                topping_cost += topping.base_price * multiplier
+                topping_cost += topping.base_price * self.pizza.size.multiplier
 
         return (base_price + topping_cost) * int(self.quantity)
 
@@ -112,15 +107,8 @@ class OrderItem(models.Model):
         topping_cost = 0
 
         if self.pizza:
-            size_name = self.pizza.size.name.lower()
-            multiplier = {
-                "small": 1.0,
-                "medium": 1.25,
-                "large": 1.5,
-            }.get(size_name, 1.0)
-
             for topping in self.toppings.all():
-                topping_cost += topping.base_price * multiplier
+                topping_cost += topping.base_price * self.pizza.size.multiplier
 
         return (base_price + topping_cost) * int(self.quantity)
 

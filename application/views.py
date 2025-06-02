@@ -17,8 +17,11 @@ def select_pizza(request, pizza_id):
    pizza = Pizza.objects.get(id=pizza_id)
    drinks = Drink.objects.filter(available=True)
    toppings = Topping.objects.all()
-   sizes = Size.objects.all()
    available_topping_ids = pizza.available_toppings.values_list('id', flat=True)
+   
+   sizes = Size.objects.all()
+   for size in sizes:
+    size.calculated_price = round(pizza.base_price * size.multiplier, 2)
    
    return render(request, "select-pizza.html", {
       "pizza": pizza, 
@@ -79,8 +82,8 @@ def cart(request):
          return redirect("/login")
       
       # get the details from the form (from frontend)
-      quantity = request.POST.get("quantity")
-      size = request.POST.get("size")
+      quantity = request.POST.get("quantity") or 1
+      size = request.POST.get("size") or "medium"
       extra_toppings = request.POST.get("extra-toppings")
       if extra_toppings:
          extra_toppings = extra_toppings.split(",")
@@ -96,6 +99,7 @@ def cart(request):
          drink = Drink.objects.get(id=drink_id)
          
       print("DRINK", drink, drink_id)
+      print("SIZE", size)
       
       # get the size from the database
       size = Size.objects.get(name=size)

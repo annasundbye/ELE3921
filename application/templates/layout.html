@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 
     <!-- tailwind css -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
     <link
       href="{% static 'fontawesomefree/css/fontawesome.css' %}"
@@ -57,9 +57,9 @@
       </nav>
     </header>
 
-    <main>{% block content %} {% endblock %}</main>
+    <main class="min-h-screen pb-12">{% block content %} {% endblock %}</main>
 
-    <footer class="">
+    <footer class="bg-red-200">
       <p>&copy; 2025 Crust Issues 🌸</p>
     </footer>
   </body>

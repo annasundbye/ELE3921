@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from application.models import Pizza, Drink, Topping
+from application.models import Pizza, Drink, Topping, Size
 
 DEFAULT_TOPPINGS = [
     Topping(name="Tomato Sauce", icon="🍅", base_price=9.00),
@@ -19,12 +19,12 @@ DEFAULT_TOPPINGS = [
 ]
 
 DEFAULT_PIZZAS = [
-   Pizza(name="Basic AF (Margherita)", base_price=259.99, icon="🍅", description="Safe choice. Boring tho."),
-   Pizza(name="You can't take this (Pepperoni)", base_price=229.99, icon="🍕", description="Loaded with pepperoni for when you're feeling extra. No cap."),
-   Pizza(name="Hotter than hell (Nduja)", base_price=299.99, icon="🌶️", description="Bro. Bro. Bro! This is hot."),
-   Pizza(name="Cheesy x 4 (Quatro Formaggi)", base_price=219.99, icon="🧀", description="Just cheese. No explanation needed. It's giving simplicity."),
-   Pizza(name="No nothing (Vegan (none slayed))", base_price=119.99, icon="🥦", description="No animals were harmed making this pizza. It's the responsible choice."),
-   Pizza(name="All the good stuff (Hella meat)", base_price=319.99, icon="🥩", description="Hella meat."),
+    Pizza(name="Basic AF (Margherita)", base_price=159, icon="🍅", description="Safe choice. Boring tho."),
+    Pizza(name="You can't take this (Pepperoni)", base_price=209, icon="🍕", description="Loaded with pepperoni for when you're feeling extra. No cap."),
+    Pizza(name="Hotter than hell (Nduja)", base_price=219, icon="🌶️", description="Bro. Bro. Bro! This is hot."),
+    Pizza(name="Cheesy x 4 (Quatro Formaggi)", base_price=239, icon="🧀", description="Just cheese. No explanation needed. It's giving simplicity."),
+    Pizza(name="No nothing (Vegan (none slayed))", base_price=129, icon="🥦", description="No animals were harmed making this pizza. It's the responsible choice."),
+    Pizza(name="All the good stuff (Hella meat)", base_price=249, icon="🥩", description="Hella meat."),
 ]
 
 PIZZA_TOPPING_MAP = {
@@ -37,12 +37,19 @@ PIZZA_TOPPING_MAP = {
 }
 
 DEFAULT_DRINKS = [
-   Drink(name="Orange juice", price=39.99, icon="🍊", description="I see you're thirsty..."),
-   Drink(name="Lemonade", price=59.99, icon="🍋", description="I see you're thirsty..."),
-   Drink(name="Ice Tea", price=45.99, icon="🌱", description="I see you're thirsty..."),
-   Drink(name="Coca Cola", price=49.99, icon="🥤", description="I see you're thirsty..."),
-   Drink(name="Water", price=49.99, icon="💦", description="I see you're thirsty..."),
-   Drink(name="Sparkling Water", price=49.99, icon="🫧", description="I see you're thirsty..."),
+    Drink(name="Orange juice", price=39.99, icon="🍊", description="I see you're thirsty..."),
+    Drink(name="Lemonade", price=59.99, icon="🍋", description="I see you're thirsty..."),
+    Drink(name="Ice Tea", price=45.99, icon="🌱", description="I see you're thirsty..."),
+    Drink(name="Coca Cola", price=49.99, icon="🥤", description="I see you're thirsty..."),
+    Drink(name="Water", price=49.99, icon="💦", description="I see you're thirsty..."),
+    Drink(name="Sparkling Water", price=49.99, icon="🫧", description="I see you're thirsty..."),
+]
+
+DEFAULT_SIZES = [
+    Size(name="small", description='10" - perfect for one', multiplier=1.0),
+    Size(name="medium", description='12" - sharing is caring', multiplier=1.1),
+    Size(name="large", description='14" - feed the squad', multiplier=1.2),
+    Size(name="x-large", description='16" - absolute unit', multiplier=1.3),
 ]
 
 
@@ -54,6 +61,7 @@ class Command(BaseCommand):
         Topping.objects.all().delete()
         Pizza.objects.all().delete()
         Drink.objects.all().delete()
+        Size.objects.all().delete()
         
         print("Inserting toppings...")
         for topping in DEFAULT_TOPPINGS:
@@ -84,5 +92,9 @@ class Command(BaseCommand):
         print("Inserting drinks...")
         for drink in DEFAULT_DRINKS:
             drink.save()
+
+        print("Inserting sizes...")
+        for size in DEFAULT_SIZES:
+            size.save()
 
         print("Done!")

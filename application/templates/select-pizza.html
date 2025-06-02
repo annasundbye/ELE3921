@@ -1,15 +1,105 @@
 {% extends "layout.html" %} {% block content %}
-<div class="page">
-  <button class="row text-pink" onclick="window.history.go(-1);">
-    <i class="fa-solid fa-arrow-left"></i>go back
-  </button>
-  <form method="post" action="/cart" class="col center">
+<button class="row text-pink p-4" onclick="window.history.go(-1);">
+  <i class="fa-solid fa-arrow-left"></i>go back
+</button>
+<form method="post" action="/cart" class="page">
+  <input type="hidden" id="pizza-id" name="pizza-id" value="{{pizza.id}}" />
+  <input type="hidden" id="size" name="size" />
+  <input type="hidden" id="extra-toppings" name="extra-toppings" />
+  <input type="hidden" id="drink-id" name="drink-id" />
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 pb-20">
     {% csrf_token %}
 
-    <h1 class="text-black bebas-neue">{{ pizza.name }} {{ pizza.icon }}</h1>
+    <div class="space-y-8">
+      <div
+        class="bg-yellow rounded-xl p-[var(--spacing-large)] flex flex-col items-center justify-center gap-2 h-64"
+      >
+        <figure class="text-7xl">{{ pizza.icon }}</figure>
+        <h1 class="text-3xl text-pink">{{ pizza.name }}</h1>
+        <h3 class="max-w-80 text-center">{{ pizza.description }}</h3>
+      </div>
 
-    <p>{{ pizza.base_price }},-</p>
+      <div class="bg-white rounded-xl p-6">
+        <h3 class="text-pink mb-4 bebas-neue text-xl">what's on it</h3>
+        <div class="flex flex-wrap gap-2">
+          {% for topping in pizza.available_toppings.all %}
+          <div
+            id="{{ topping.id }}"
+            class="bg-[var(--color-turqoise)]/50 border border-[var(--color-turqoise)] px-3 py-1 rounded-full text-sm flex items-center gap-2"
+          >
+            <figure>{{topping.icon}}</figure>
+            <span>{{ topping.name }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
 
+    <div class="space-y-8">
+      <div class="rounded-xl p-[var(--spacing-large)] bg-white">
+        <h3 class="text-pink mb-4 bebas-neue text-xl">pick your size</h3>
+
+        <div class="grid grid-cols-2 gap-3">
+          {% for size in sizes %}
+          <button
+            type="button"
+            id="size-{{size.name}}"
+            data-id="{{size.name}}"
+            class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
+          >
+            <h4>{{size.name}}</h4>
+            <div class="text-sm text-gray-600">{{size.description}}</div>
+            <p class="text-[var(--color-turqoise)]">
+              {{ size.calculated_price }},-
+            </p>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="rounded-xl p-[var(--spacing-large)] bg-white">
+        <h3 class="text-pink mb-4 bebas-neue text-xl">extra toppings</h3>
+        <div class="grid grid-cols-2 gap-3">
+          {% for topping in toppings %}
+          <button
+            type="button"
+            id="extra-topping-{{topping.name}}"
+            data-id="{{topping.id}}"
+            class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
+          >
+            <figure>{{topping.icon}}</figure>
+            <h4>{{topping.name}}</h4>
+            <p class="text-[var(--color-turqoise)]">
+              +{{topping.base_price}},-
+            </p>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="rounded-xl p-[var(--spacing-large)] bg-white">
+        <h3 class="text-pink mb-4 bebas-neue text-xl">add a drink</h3>
+        <div class="grid grid-cols-2 gap-3">
+          {% for drink in drinks %}
+          <button
+            type="button"
+            id="{{drink.id}}"
+            class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
+          >
+            <figure>{{drink.icon}}</figure>
+            <h4>{{drink.name}}</h4>
+            <p class="text-[var(--color-turqoise)]">{{drink.price}},-</p>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="fixed left-0 right-0 bottom-0 bg-white border-t border-t-gray-300 p-4 flex gap-6 justify-end items-center"
+  >
     <div class="row padding-small">
       <button id="sub" type="button">
         {% include "components/minus-icon.html" %}
@@ -28,91 +118,8 @@
         {% include "components/plus-icon.html" %}
       </button>
     </div>
-    <div>
-      <select name="size" id="select-pizza-size">
-        <option value="small">Small</option>
-        <option value="medium">Medium</option>
-        <option value="large">Large</option>
-      </select>
-    </div>
-
-    <div class="col">
-      <h2 class="text-black">Toppings</h2>
-      <p>Choose from a variety of <i>delicious</i> toppings 😩</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Topping</th>
-            <th>Price</th>
-            <th>Added</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for topping in toppings %}
-          <tr
-            id="{{ topping.id }}"
-            class="topping-option"
-            data-id="{{ topping.id }}"
-            data-price="{{ topping.base_price }}"
-            style="cursor: pointer"
-          >
-            <td>{{ topping.icon }} {{ topping.name }}</td>
-            <td class="topping-price">{{ topping.base_price }},-</td>
-            <td></td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <input type="hidden" name="extra-toppings" id="extra-toppings" />
-      <input
-        type="hidden"
-        name="pizza-id"
-        id="pizza-id"
-        value="{{ pizza.id }}"
-      />
-    </div>
-    <div class="col">
-      <h2 class="text-black">Drinks here</h2>
-      <p>We got tasty dranks 😗</p>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Drink</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for drink in drinks %}
-          <tr
-            id="{{ drink.id }}"
-            data-id="{{ drink.id }}"
-            class="drink-option"
-            style="cursor: pointer"
-          >
-            <td>{{ drink.icon }} {{ drink.name }}</td>
-            <td>{{ drink.price }},-</td>
-          </tr>
-
-          {% endfor %}
-        </tbody>
-      </table>
-      <input type="hidden" name="drink-id" id="drink-id" />
-    </div>
-    <button type="submit" class="cta cta-primary">add to cart</button>
-  </form>
-</div>
+    <button type="submit" class="cta cta-primary md:w-64">ADD TO CART</button>
+  </div>
+</form>
 <script src="/static/js/add-to-cart.js"></script>
-<script>
-  function changeQuantity(button, change) {
-    const quantityInput = button.parentElement.querySelector(
-      'input[name="quantity"]'
-    );
-    let value = parseInt(quantityInput.value) || 1;
-    value = Math.max(1, value + change);
-    quantityInput.value = value;
-  }
-</script>
 {% endblock %}

@@ -2,15 +2,19 @@
   id="add-pizza-{{pizza.id}}"
   href="{% url 'application:select-pizza' pizza_id=pizza.id %}"
 >
-  <div class="product-card bg-yellow">
-    <div class="emoji center">{{ pizza.icon }}</div>
-    <div class="description">
-      <h3 class="text-pink">{{ pizza.name }}</h3>
+  <div class="flex flex-col rounded-xl shadow-sm bg-yellow">
+    <div class="h-32 flex justify-center items-center">
+      <figure class="text-5xl">{{ pizza.icon }}</figure>
+    </div>
+    <div class="bg-white h-52 p-4 rounded-b-xl flex flex-col justify-between">
       <div>
-        <p class="text-black">{{ pizza.description }}</p>
-        <p class="price">from {{ pizza.base_price }} kr</p>
+        <h3 class="text-pink">{{ pizza.name }}</h3>
+        <p class="text-black max-w-[80ch]">{{ pizza.description }}</p>
       </div>
-      <button class="cta cta-primary w-fit">add to cart</button>
+      <div class="space-y-2">
+        <p class="text-turqoise">from {{ pizza.base_price }} kr</p>
+        <button class="cta cta-primary w-fit">add to cart</button>
+      </div>
     </div>
   </div>
 </a>

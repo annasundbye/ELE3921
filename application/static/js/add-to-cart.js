@@ -1,101 +1,114 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Elements
-  const quantity = document.getElementById("quantity");
-  const customQuantity = document.getElementById("custom-quantity");
-  const finalQuantity = document.getElementById("final-quantity");
-  const toppingElements = document.querySelectorAll(".topping-option");
-  const extraToppingsInput = document.getElementById("extra-toppings");
-  const drinkElements = document.querySelectorAll(".drink-option");
-  const drinkIdInput = document.getElementById("drink-id");
-  const sizeSelect = document.getElementById("select-pizza-size");
+  // Quantity Elements
+  const quantityEl = document.getElementById("quantity");
+  const customQuantityEl = document.getElementById("custom-quantity");
+  const finalQuantityEl = document.getElementById("final-quantity");
 
   // State
   const selectedToppings = new Set();
-  const sizeMultipliers = {
-    small: 1.0,
-    medium: 1.25,
-    large: 1.5,
-  };
+  let selectedDrinkId = null;
 
-  //  Quantity Logic
+  // Add hidden inputs for selected options
+  const form = document.querySelector("form");
+  const sizeInput = document.querySelector("input#size");
+
+  const toppingsInput = document.createElement("input");
+  toppingsInput.type = "hidden";
+  toppingsInput.name = "extra-toppings";
+  toppingsInput.id = "extra-toppings";
+  form.appendChild(toppingsInput);
+
+  const drinkInput = document.createElement("input");
+  drinkInput.type = "hidden";
+  drinkInput.name = "drink-id";
+  drinkInput.id = "drink-id";
+  form.appendChild(drinkInput);
+
+  // Handle Quantity Display
   function syncFinalQuantity() {
-    finalQuantity.value = quantity.innerText;
+    finalQuantityEl.value = quantityEl.innerText;
   }
 
-  quantity.addEventListener("click", () => {
-    customQuantity.value = quantity.innerText;
-    quantity.classList.add("hidden");
-    customQuantity.classList.remove("hidden");
-    customQuantity.focus();
+  quantityEl.addEventListener("click", () => {
+    customQuantityEl.value = quantityEl.innerText;
+    quantityEl.classList.add("hidden");
+    customQuantityEl.classList.remove("hidden");
+    customQuantityEl.focus();
   });
 
-  customQuantity.addEventListener("change", () => {
-    const newVal = parseInt(customQuantity.value);
-    if (!isNaN(newVal) && newVal >= 0) {
-      quantity.innerText = newVal;
+  customQuantityEl.addEventListener("change", () => {
+    const newVal = parseInt(customQuantityEl.value);
+    if (!isNaN(newVal) && newVal >= 1) {
+      quantityEl.innerText = newVal;
     }
-    customQuantity.classList.add("hidden");
-    quantity.classList.remove("hidden");
+    customQuantityEl.classList.add("hidden");
+    quantityEl.classList.remove("hidden");
     syncFinalQuantity();
   });
 
   document.getElementById("sub").addEventListener("click", () => {
-    const currentQuantity = parseInt(quantity.innerText);
-    quantity.innerText = Math.max(currentQuantity - 1, 0);
+    const qty = Math.max(1, parseInt(quantityEl.innerText) - 1);
+    quantityEl.innerText = qty;
     syncFinalQuantity();
   });
 
   document.getElementById("add").addEventListener("click", () => {
-    const currentQuantity = parseInt(quantity.innerText);
-    quantity.innerText = currentQuantity + 1;
+    const qty = parseInt(quantityEl.innerText) + 1;
+    quantityEl.innerText = qty;
     syncFinalQuantity();
   });
 
-  //  Toppings Logic
-  toppingElements.forEach((el) => {
-    el.addEventListener("click", () => {
-      const toppingId = el.dataset.id;
-      const addedCell = el.querySelector("td:last-child");
+  // Select Size
+  document.querySelectorAll("[id^='size-']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sizeInput.value = btn.dataset.id;
+
+      // Highlight selected
+      document.querySelectorAll("[id^='size-']").forEach((b) => {
+        b.classList.remove("border-[var(--color-pink)]");
+        b.classList.add("border-gray-300");
+      });
+      btn.classList.add("border-[var(--color-pink)]");
+      btn.classList.remove("border-gray-300");
+    });
+  });
+
+  // default size is medium
+  const defaultBtn = document.querySelector('[id="size-medium"]');
+  if (defaultBtn) {
+    defaultBtn.click();
+  }
+
+  // Select Toppings
+  document.querySelectorAll("[id^='extra-topping-']").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const toppingId = btn.dataset.id;
 
       if (selectedToppings.has(toppingId)) {
         selectedToppings.delete(toppingId);
-        el.classList.remove("selected");
-        if (addedCell) addedCell.textContent = "";
+        btn.classList.remove("border-[var(--color-pink)]");
+        btn.classList.add("border-gray-300");
       } else {
         selectedToppings.add(toppingId);
-        el.classList.add("selected");
-        if (addedCell) addedCell.textContent = "✅";
+        btn.classList.add("border-[var(--color-pink)]");
+        btn.classList.remove("border-gray-300");
       }
 
-      extraToppingsInput.value = Array.from(selectedToppings).join(",");
+      toppingsInput.value = Array.from(selectedToppings).join(",");
     });
   });
 
-  //  Drink Logic
-  drinkElements.forEach((el) => {
-    el.addEventListener("click", () => {
-      const drinkId = el.dataset.id;
-      drinkIdInput.value = drinkId;
+  // Select Drink
+  document.querySelectorAll(".add-a-drink button").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedDrinkId = btn.id;
+      drinkInput.value = selectedDrinkId;
+
+      // Deselect all others
+      document.querySelectorAll(".add-a-drink button").forEach((b) => {
+        b.classList.remove("border-[var(--color-pink)]", "ring-2");
+      });
+      btn.classList.add("border-[var(--color-pink)]", "ring-2");
     });
   });
-
-  //  Size-based Topping Price Update
-  function updateToppingPrices() {
-    const selectedSize = sizeSelect.value;
-    const multiplier = sizeMultipliers[selectedSize] || 1.0;
-
-    toppingElements.forEach((el) => {
-      const basePrice = parseFloat(el.dataset.price);
-      const priceCell = el.querySelector(".topping-price");
-      const newPrice = (basePrice * multiplier).toFixed(2);
-      if (priceCell) {
-        priceCell.textContent = `${newPrice},-`;
-      }
-    });
-  }
-
-  if (sizeSelect) {
-    sizeSelect.addEventListener("change", updateToppingPrices);
-    updateToppingPrices(); // Initial run
-  }
 });

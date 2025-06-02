@@ -13,11 +13,11 @@
   <div class="overlay"></div>
 </div>
 
-<div class="center" style="margin-top: 1.4rem">
+<div class="text-center my-6">
   <h2 class="bebas-neue text-pink" style="font-size: 36px">The menu</h2>
 </div>
 
-<div class="product-grid center">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
   {% for pizza in pizzas %} {% include "components/pizza-card.html" %}
   {%endfor%}
 </div>
