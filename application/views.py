@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from .models import Pizza, Drink, Topping, User, Cart, CartItem, Size, PizzaPrice, Order, OrderItem
-from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth import update_session_auth_hash, authenticate, login as auth_login, logout as auth_logout
+from django.contrib.auth.forms import PasswordChangeForm
 from django.http import HttpResponseBadRequest
+from django.contrib.auth import update_session_auth_hash
+from django.contrib import messages
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
+
 
 def home(request):
    all_pizzas = Pizza.objects.filter(available=True)
@@ -69,10 +75,48 @@ def logout(request):
    return redirect("/")
 
 def profile(request):
-   if not request.user.is_authenticated:
-      return redirect("/login")
-   
-   return render (request, "profile.html")
+    if not request.user.is_authenticated:
+        return redirect("/login")
+
+    password_form = PasswordChangeForm(user=request.user)
+
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        email = request.POST.get("email", "").strip()
+
+        # Validation
+        name_valid = name.isalpha()
+        try:
+            validate_email(email)
+            email_valid = True
+        except ValidationError:
+            email_valid = False
+
+        if not name_valid:
+            messages.error(request, "Name must only contain letters.")
+        if not email_valid:
+            messages.error(request, "Enter a valid email address.")
+
+        if name_valid and email_valid:
+            request.user.first_name = name
+            request.user.email = email
+            request.user.save()
+            messages.success(request, "Profile updated successfully.")
+            return redirect("/profile")
+
+    return render(request, "profile.html", {
+        "password_form": password_form,
+        "user": request.user
+    })
+
+
+def change_password(request):
+   password_form = PasswordChangeForm(data=request.POST, user=request.user)
+   if password_form.is_valid():
+      user = password_form.save()
+      update_session_auth_hash(request, user)
+      return redirect("/profile")
+
 
 def cart(request):
    # handle add to cart

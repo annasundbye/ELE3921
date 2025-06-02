@@ -47,7 +47,7 @@
           href="{% url 'application:profile' %}"
           style="color: var(--color-white); font-weight: 800"
         >
-          hey, {{ user.username }} ✌️
+          hey, {{ user.first_name }} ✌️
         </a>
         {% else %}
         <a href="{% url 'application:login' %}">sign in bestie</a>
