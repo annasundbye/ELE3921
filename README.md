@@ -2,9 +2,9 @@
 
 ## About the project
 
-This is our Pizzeria Takeout web app. It is built in Django. It uses HTML templates with JavaScript and CSS / Tailwind CSS on the frontend. The database is sqlite. 
+This is our Pizzeria Takeout web app. It is built in Django. It uses HTML templates with JavaScript and CSS / Tailwind CSS on the frontend. The database is sqlite.
 
-[Link to YouTube](https://youtube.com/)
+[Link to YouTube](https://youtu.be/pAtbFThSaUc)
 
 ## Start the app!
 
@@ -33,7 +33,6 @@ To stop the program, press `CTRL + C`.
 ## Data Dump
 
 The data dump is included in `data.json` by running: `python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > data.json`.
-
 
 ## GITHUB
 
