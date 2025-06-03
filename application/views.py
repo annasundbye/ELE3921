@@ -10,9 +10,11 @@ from django.core.exceptions import ValidationError
 
 
 def home(request):
-   all_pizzas = Pizza.objects.filter(available=True)
+   pizzas = Pizza.objects.filter(available=True)
+   if len(pizzas) >= 3:
+      pizzas = pizzas[:3]
    
-   return render(request, "home.html", {"pizzas": all_pizzas})
+   return render(request, "home.html", {"pizzas": pizzas})
 
 def menu(request):
    all_pizzas = Pizza.objects.filter(available=True)
