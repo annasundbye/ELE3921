@@ -21,12 +21,9 @@ class Topping(models.Model):
         return self.name
 
 class Pizza(models.Model):
-    """This is the model for a pizza. 
-    It has a name, the base price (can be adjusted on a sale for example) 
-    and the available toppings."""
     name = models.CharField(max_length=100)
     base_price = models.DecimalField(max_digits=6, decimal_places=2)
-    available_toppings = models.ManyToManyField(Topping, blank=True)
+    toppings = models.ManyToManyField(Topping, blank=True)
     icon = models.CharField(max_length=255)
     description = models.CharField(max_length=100)
     available = models.BooleanField(default=True, db_index=True)
@@ -80,7 +77,7 @@ class CartItem(models.Model):
             for topping in self.toppings.all():
                 topping_cost += topping.base_price * self.pizza.size.multiplier
 
-        return (base_price + topping_cost) * int(self.quantity)
+        return round((base_price + topping_cost) * int(self.quantity), 2)
 
     def __str__(self):
         return f"CartItem ({self.pizza or self.drink}) x{self.quantity}"
@@ -91,6 +88,13 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=8, decimal_places=2)
+    
+    class Status(models.TextChoices):
+        RECEIVED = "received", "Received"
+        IN_PROGRESS = "in_progress", "In progress"
+        COMPLETED = "completed", "Completed"
+        
+    status = models.CharField(max_length=20, choices=Status.choices, default=Status.RECEIVED, db_index=True)
     
     def __str__(self):
         return f"Order {self.id} by {self.user.username}"
@@ -110,7 +114,7 @@ class OrderItem(models.Model):
             for topping in self.toppings.all():
                 topping_cost += topping.base_price * self.pizza.size.multiplier
 
-        return (base_price + topping_cost) * int(self.quantity)
+        return round((base_price + topping_cost) * int(self.quantity), 2)
 
     
     def __str__(self):

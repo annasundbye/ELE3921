@@ -1,8 +1,7 @@
 {% extends "layout.html" %} {% block content %}
 <div class="page">
-  <h1 class="text-turqoise center">Menu (header)</h1>
+  <h2 class="text-pink text-2xl text-center mb-4">Pizza menu</h2>
 
-  <h2 class="text-pink center">Pizzas</h2>
   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% for pizza in pizzas %} {% include "components/pizza-card.html" %}
     {%endfor %}

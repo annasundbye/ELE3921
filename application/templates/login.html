@@ -1,16 +1,31 @@
 {% extends "layout.html" %} {% block content %}
 <div class="page">
-  <h1 class="text-turqoise center">Sign In</h1>
+  <div class="text-center mb-8">
+    <a href="/" class="inline-block">
+      <h1 class="text-5xl text-pink">CRUST ISSUES</h1>
+    </a>
+    <p class="text-gray-600 mt-2">welcome back bestie</p>
+  </div>
 
-  <form action="/login" method="POST" class="col center">
+  <form
+    action="/login"
+    method="POST"
+    class="flex flex-col gap-2 rounded-xl border border-gray-300 p-8 w-fit mx-auto shadow-lg"
+  >
     {% csrf_token %}
-    <div class="col">
-      <label for="username">Username</label>
-      <input name="username" type="text" placeholder="mammamia" required />
+    <div>
+      <label class="font-semibold" for="username">Username</label>
+      <input
+        name="username"
+        type="text"
+        placeholder="mammamia"
+        autofocus
+        required
+      />
     </div>
 
-    <div class="col">
-      <label for="password">Password</label>
+    <div>
+      <label class="font-semibold" for="password">Password</label>
       <input
         name="password"
         type="password"
@@ -19,15 +34,14 @@
       />
     </div>
 
-    <div class="col">
-      <button type="submit" class="cta cta-primary">Sign in</button>
+    <div class="mt-6 space-y-2">
+      <button type="submit" class="cta cta-primary w-full">Sign in</button>
       <p class="center">
-        Don't have an account yet??
+        don't have an account yet??
         <a
           href="{% url 'application:signup' %}"
-          class="text-black"
-          style="margin-left: 5px"
-          >Sign up</a
+          class="font-semibold text-pink ml-1 hover:underline"
+          >sign up!</a
         >
       </p>
     </div>

@@ -1,24 +1,33 @@
 {% extends "layout.html" %} {% block content %}
 <div class="page">
-  <h1 class="text-turqoise center">Sign Up</h1>
+  <div class="text-center mb-8">
+    <a href="/" class="inline-block">
+      <h1 class="text-5xl text-pink">CRUST ISSUES</h1>
+    </a>
+    <p class="text-gray-600 mt-2">join the pizza partyy</p>
+  </div>
 
-  <form action="/signup" method="POST" class="col center">
+  <form
+    action="/signup"
+    method="POST"
+    class="flex flex-col gap-2 rounded-xl border border-gray-300 p-8 w-fit mx-auto shadow-lg"
+  >
     {% csrf_token %}
-    <div class="col">
-      <label for="firstname">First name</label>
+    <div>
+      <label class="font-semibold" for="firstname">First name</label>
       <input name="firstname" type="text" placeholder="Mamma" required />
     </div>
-    <div class="col">
-      <label for="lastname">Last name</label>
+    <div>
+      <label class="font-semibold" for="lastname">Last name</label>
       <input name="lastname" type="text" placeholder="Mia" required />
     </div>
-    <div class="col">
-      <label for="username">Username yo</label>
+    <div>
+      <label class="font-semibold" for="username">Username yo</label>
       <input name="username" type="text" placeholder="mammamia" required />
     </div>
 
-    <div class="col">
-      <label for="email">Email</label>
+    <div>
+      <label class="font-semibold" for="email">Email</label>
       <input
         name="email"
         type="text"
@@ -27,8 +36,8 @@
       />
     </div>
 
-    <div class="col">
-      <label for="password">Password</label>
+    <div>
+      <label class="font-semibold" for="password">Password</label>
       <input
         name="password"
         type="password"
@@ -37,15 +46,14 @@
       />
     </div>
 
-    <div class="col">
-      <button type="submit" class="cta cta-primary">Sign up</button>
+    <div class="mt-6 space-y-2">
+      <button type="submit" class="cta cta-primary w-full">Sign up</button>
       <p class="center">
-        Don't have an account yet??
+        already one of us?
         <a
-          href="{% url 'application:signup' %}"
-          class="text-black"
-          style="margin-left: 5px"
-          >Sign up</a
+          href="{% url 'application:login' %}"
+          class="font-semibold text-pink ml-1 hover:underline"
+          >log in</a
         >
       </p>
     </div>

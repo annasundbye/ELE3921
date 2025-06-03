@@ -23,12 +23,12 @@
       <div class="bg-white rounded-xl p-6">
         <h3 class="text-pink mb-4 bebas-neue text-xl">what's on it</h3>
         <div class="flex flex-wrap gap-2">
-          {% for topping in pizza.available_toppings.all %}
+          {% for topping in pizza.toppings.all %}
           <div
             id="{{ topping.id }}"
             class="bg-[var(--color-turqoise)]/50 border border-[var(--color-turqoise)] px-3 py-1 rounded-full text-sm flex items-center gap-2"
           >
-            <figure>{{topping.icon}}</figure>
+            <figure>{{ topping.icon }}</figure>
             <span>{{ topping.name }}</span>
           </div>
           {% endfor %}
@@ -41,7 +41,8 @@
           {% for drink in drinks %}
           <button
             type="button"
-            id="{{drink.id}}"
+            id="drink-id-{{drink.id}}"
+            data-id="{{drink.id}}"
             class="border border-gray-300 rounded-xl p-4 hover:border-[var(--color-pink)]"
           >
             <figure>{{drink.icon}}</figure>
@@ -103,12 +104,12 @@
     class="fixed left-0 right-0 bottom-0 bg-white border-t border-t-gray-300 p-4 flex gap-6 justify-end items-center"
   >
     <div class="row padding-small">
-      <button id="sub" type="button">
-        {% include "components/minus-icon.html" %}
+      <button id="sub" type="button" class="rounded-full size-7 bg-pink">
+        <i class="fa-solid fa-minus text-white"></i>
       </button>
-      <p id="quantity" style="cursor: pointer">1</p>
-      <button id="add" type="button">
-        {% include "components/plus-icon.html" %}
+      <p id="quantity" class="text-lg">1</p>
+      <button id="add" type="button" class="rounded-full size-7 bg-pink">
+        <i class="fa-solid fa-plus text-white"></i>
       </button>
     </div>
     <button type="submit" class="cta cta-primary md:w-64">ADD TO CART</button>

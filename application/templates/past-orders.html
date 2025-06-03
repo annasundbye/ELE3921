@@ -1,25 +1,50 @@
 {% extends "layout.html" %} {% block content %}
 <div class="page">
-  <h1>Your Past Orders</h1>
+  <h1 class="text-pink text-2xl">Your Past Orders</h1>
 
   {% if orders %} {% for order in orders %}
-  <div class="order-card">
-    <h2>Order #{{ order.id }} – {{ order.created_at|date:"M d, Y H:i" }}</h2>
-    <p><strong>Total:</strong> {{ order.total_price }} NOK</p>
-    <ul>
+  <div class="order-card space-y-4">
+    <div class="space-y-2">
+      <div>
+        <h2 class="text-lg">
+          Order #{{ order.id }} - {{ order.created_at|date:"M d, Y H:i" }}
+        </h2>
+
+        <p class="text-sm text-turqoise">Total: {{ order.total_price }},-</p>
+      </div>
+
+      <div class="status-{{order.status}} px-4 py-1 w-fit rounded-full">
+        {{order.status}}
+      </div>
+    </div>
+
+    <ul class="space-y-2">
       {% for item in order.orderitems.all %}
       <li class="order-item">
         {% if item.pizza %} 🍕 <strong>{{ item.pizza.pizza.name }}</strong>
         ({{ item.pizza.size }}) x{{ item.quantity }} {%if item.toppings.all%}
         <br />
 
-        <em>Toppings:</em> {%for topping in item.toppings.all%} {{ topping.name
-        }}{% if not forloop.last %}, {% endif %} {% endfor %} {% endif %} {%
-        elif item.drink %} 🥤 <strong>{{ item.drink.name }}</strong> x{{
-        item.quantity }} {% endif %}
+        <em>Toppings:</em>
+        {%for topping in item.toppings.all%}
+        <!-- stop format error -->
+        {{ topping.icon }} {{topping.name}}
+        <!-- stop format error -->
+        {% if not forloop.last %}, {% endif %} {% endfor %} {% endif %}
+        <!-- stop format error -->
+        {% elif item.drink %} 🥤 <strong>{{ item.drink.name }}</strong>
+        <!-- stop format error -->
+        x{{ item.quantity }} {% endif %}
       </li>
       {% endfor %}
     </ul>
+
+    <form method="post" action="/order/{{ order.id }}/re-order/">
+      {% csrf_token %}
+      <button type="submit" title="Reorder" class="cta cta-primary">
+        Re-order <i class="fa-solid fa-repeat"></i>
+      </button>
+    </form>
   </div>
   {% endfor %} {% else %}
   <p>You have no past orders yet.</p>

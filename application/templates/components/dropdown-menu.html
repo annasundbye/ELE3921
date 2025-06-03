@@ -1,17 +1,45 @@
-<button id="hamburger-button" class="hamburger-menu">
-  <i class="fa-solid fa-bars"></i>
-</button>
-<div class="dropdown-menu hidden" id="dropdown-menu">
-  <a href="{% url 'application:menu' %}">menu</a>
-  {% if user.is_authenticated %}
-  <a href="{% url 'application:profile' %}">profile</a>
-  <a href="{% url 'application:past_orders' %}">order history</a>
-  <form method="post" action="/logout">
-    {% csrf_token %}
-    <button>log out</button>
-  </form>
-  {%else%}
-  <a href="{% url 'application:login' %}">login</a>
-  {%endif%}
+<div class="relative inline-block text-left">
+  <button id="hamburger-button" class="text-2xl p-2 rounded">
+    <i class="fa-solid fa-bars text-white"></i>
+  </button>
+
+  <div
+    id="dropdown-menu"
+    class="hidden absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+  >
+    <a
+      href="{% url 'application:menu' %}"
+      class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >menu</a
+    >
+    {% if user.is_authenticated %}
+    <a
+      href="{% url 'application:profile' %}"
+      class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >profile</a
+    >
+    <a
+      href="{% url 'application:past_orders' %}"
+      class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >order history</a
+    >
+    <form method="post" action="/logout">
+      {% csrf_token %}
+      <button
+        type="submit"
+        class="w-full text-left block px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >
+        log out
+      </button>
+    </form>
+    {% else %}
+    <a
+      href="{% url 'application:login' %}"
+      class="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+      >login</a
+    >
+    {% endif %}
+  </div>
 </div>
+
 <script src="/static/js/dropdown-menu.js"></script>

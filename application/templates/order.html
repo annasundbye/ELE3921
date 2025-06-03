@@ -1,12 +1,23 @@
 {% extends "layout.html" %} {% block content %}
-<div class="page">
-  <h1 class="text-black">Order Confirmation</h1>
+<div class="page flex flex-col gap-2 items-center">
+  {% if just_ordered %}
+  <h1 class="text-pink text-2xl">Order Confirmation</h1>
 
-  <div class="col">
-    <p>{{message}}</p>
+  <p>{{message}}</p>
 
-    <a href="{% url 'application:home' %}" class="cta cta-primary">Go home</a>
-  </div>
+  <a href="{% url 'application:past_orders' %}" class="cta cta-primary"
+    >View your orders here</a
+  >
+  <a href="{% url 'application:home' %}" class="cta cta-secondary">Go home</a>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="/static/js/confetti.js"></script>
+  {% else %}
+  <h1 class="text-pink text-2xl">Not much to see here...</h1>
+  <a href="{% url 'application:home' %}" class="cta cta-primary mt-8"
+    >Go home</a
+  >
+  {% endif %}
 </div>
 
 {% endblock %}

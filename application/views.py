@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pizza, Drink, Topping, User, Cart, CartItem, Size, PizzaPrice, Order, OrderItem
 from django.contrib.auth import update_session_auth_hash, authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import PasswordChangeForm
@@ -20,14 +20,18 @@ def menu(request):
    return render(request, "menu.html", {"pizzas": all_pizzas, "drinks": all_drinks})
 
 def select_pizza(request, pizza_id):
-   pizza = Pizza.objects.get(id=pizza_id)
+   try:
+      pizza = get_object_or_404(Pizza, id=pizza_id)
+   except:
+      return redirect("/")
+   
    drinks = Drink.objects.filter(available=True)
    toppings = Topping.objects.all()
-   available_topping_ids = pizza.available_toppings.values_list('id', flat=True)
+   available_topping_ids = pizza.toppings.values_list('id', flat=True)
    
    sizes = Size.objects.all()
    for size in sizes:
-    size.calculated_price = round(pizza.base_price * size.multiplier, 2)
+      size.calculated_price = round(pizza.base_price * size.multiplier, 2)
    
    return render(request, "select-pizza.html", {
       "pizza": pizza, 
@@ -75,47 +79,55 @@ def logout(request):
    return redirect("/")
 
 def profile(request):
-    if not request.user.is_authenticated:
-        return redirect("/login")
+   if not request.user.is_authenticated:
+      return redirect("/login")
 
-    password_form = PasswordChangeForm(user=request.user)
+   password_form = PasswordChangeForm(user=request.user)
 
-    if request.method == "POST":
-        name = request.POST.get("name", "").strip()
-        email = request.POST.get("email", "").strip()
+   if request.method == "POST":
+      name = request.POST.get("name", "").strip()
+      email = request.POST.get("email", "").strip()
 
-        # Validation
-        name_valid = name.isalpha()
-        try:
-            validate_email(email)
-            email_valid = True
-        except ValidationError:
-            email_valid = False
+      # Validation
+      name_valid = name.isalpha()
+      try:
+         validate_email(email)
+         email_valid = True
+      except ValidationError:
+         email_valid = False
 
-        if not name_valid:
-            messages.error(request, "Name must only contain letters.")
-        if not email_valid:
-            messages.error(request, "Enter a valid email address.")
+      if not name_valid:
+         messages.error(request, "Name must only contain letters.")
+      if not email_valid:
+         messages.error(request, "Enter a valid email address.")
 
-        if name_valid and email_valid:
-            request.user.first_name = name
-            request.user.email = email
-            request.user.save()
-            messages.success(request, "Profile updated successfully.")
-            return redirect("/profile")
+      if name_valid and email_valid:
+         request.user.first_name = name
+         request.user.email = email
+         request.user.save()
+         messages.success(request, "Profile updated successfully.")
+         return redirect("/profile")
 
-    return render(request, "profile.html", {
-        "password_form": password_form,
-        "user": request.user
-    })
+   return render(request, "profile.html", {
+      "password_form": password_form,
+      "user": request.user
+   })
 
 
 def change_password(request):
-   password_form = PasswordChangeForm(data=request.POST, user=request.user)
-   if password_form.is_valid():
-      user = password_form.save()
-      update_session_auth_hash(request, user)
-      return redirect("/profile")
+   if request.method == "POST":
+      password_form = PasswordChangeForm(data=request.POST, user=request.user)
+      if password_form.is_valid():
+         user = password_form.save()
+         update_session_auth_hash(request, user)
+         messages.success(request, "Password changed!")
+         return redirect("/profile")
+      else:
+         messages.error(request, "Password must contain 1 uppercase letter, 1 number and 1 special character (i think)")
+         return redirect("/profile")
+   else:
+      password_form = PasswordChangeForm(user=request.user)
+      return render(request, "change-password.html", {"form": password_form})
 
 
 def cart(request):
@@ -131,6 +143,8 @@ def cart(request):
       extra_toppings = request.POST.get("extra-toppings")
       if extra_toppings:
          extra_toppings = extra_toppings.split(",")
+         
+      print(extra_toppings, "toppings")
       
       # get the pizza from the database
       pizza_id = request.POST.get("pizza-id")
@@ -141,9 +155,6 @@ def cart(request):
       drink = None # default
       if drink_id:
          drink = Drink.objects.get(id=drink_id)
-         
-      print("DRINK", drink, drink_id)
-      print("SIZE", size)
       
       # get the size from the database
       size = Size.objects.get(name=size)
@@ -158,6 +169,7 @@ def cart(request):
       if extra_toppings:
          toppings_in_db = Topping.objects.filter(id__in=extra_toppings)
          cart_item.toppings.set(toppings_in_db)
+         cart_item.save()
       
       # show the cart
       return redirect("/cart")
@@ -173,62 +185,111 @@ def cart(request):
       items = []
    
    for item in items:
-      print(item)
+      print(item, "iTEM", len(item.toppings.all()))
+      for t in item.toppings.all():
+         print(t, "topping")
    
-   return render(request, "cart.html", {"cart": cart, "items": items})
+   return render(request, "cart.html", {"cart": cart, "items": items, "count": len(items)})
 
 def delete_cart_item(request):
    if request.method == "POST":
-        cart_item_id = request.POST.get("id")
+      cart_item_id = request.POST.get("id")
 
-        try:
-            cart_item = CartItem.objects.get(id=cart_item_id, cart__user=request.user)
-        except CartItem.DoesNotExist:
-            return HttpResponseBadRequest("Bro dont try to delete another bro's mukbang, dude.")
+      try:
+         cart_item = CartItem.objects.get(id=cart_item_id, cart__user=request.user)
+      except CartItem.DoesNotExist:
+         return HttpResponseBadRequest("Bro dont try to delete another bro's mukbang, dude.")
 
-        cart_item.delete()
-        return redirect("/cart")
+      cart_item.delete()
+      return redirect("/cart")
 
 
 def order(request):
    if request.method == "POST":
-      # get the user's cart
-      cart = Cart.objects.get(user=request.user)
-      
-      # get the cart items
+      if not request.user.is_authenticated:
+         return redirect("/login")
+
+      # Get the user's cart
+      try:
+         cart = Cart.objects.get(user=request.user)
+      except Cart.DoesNotExist:
+         return redirect("/cart")  # No cart to process
+
+      # Get the cart items
       items = CartItem.objects.filter(cart=cart)
-      
-      # create order from cart
-      new_order = Order.objects.create(user=request.user, total_price=cart.total_price())
-      
-      # add order items to order from cart
+
+      if not items.exists():
+         return redirect("/cart")
+
+      # Create order from cart
+      new_order = Order.objects.create(
+         user=request.user,
+         total_price=cart.total_price()
+      )
+
+      # Add order items to order from cart
       for item in items:
-         # create order item
          new_order_item = OrderItem.objects.create(
-            order=new_order, 
-            pizza=item.pizza, 
-            drink=item.drink, 
-            quantity=item.quantity
+               order=new_order,
+               pizza=item.pizza,
+               drink=item.drink,
+               quantity=item.quantity
          )
-         
+
          new_order_item.toppings.set(item.toppings.all())
          new_order_item.save()
-         
-      # clear / delete the cart
+
+      # Clear/delete the cart
       cart.delete()
       
+      # to show confirmation
+      request.session["just_ordered"] = True
+
       return redirect("/order")
-   
-   return render(request, "order.html", {"message": "Thank you for your order"})
+
+   just_ordered = request.session.pop("just_ordered", False)
+
+   return render(request, "order.html", {
+      "message": "Thank you for your order" if just_ordered else None,
+      "just_ordered": just_ordered,
+   })
 
 def past_orders(request):
-    if not request.user.is_authenticated:
-        return redirect("/login")
-    
-    orders = (
-        Order.objects.filter(user=request.user)
-        .prefetch_related("orderitems__pizza", "orderitems__drink", "orderitems__toppings")
-        .order_by("-created_at")
-    )
-    
-    return render(request, "past-orders.html", {"orders": orders})
+   if not request.user.is_authenticated:
+      return redirect("/login")
+   
+   orders = (
+      Order.objects.filter(user=request.user)
+      .prefetch_related("orderitems__pizza", "orderitems__drink", "orderitems__toppings")
+      .order_by("-created_at")
+   )
+   
+   for order in orders:
+      print(order, "has", order.orderitems.all())
+   
+   return render(request, "past-orders.html", {"orders": orders})
+
+def reorder(request, order_id):
+   if not request.user.is_authenticated:
+      return redirect("/login")
+
+   # Get the previous order
+   prev_order = get_object_or_404(Order, id=order_id, user=request.user)
+
+   # Create or get current cart
+   cart, _ = Cart.objects.get_or_create(user=request.user)
+
+   # Clear existing cart items if you want a clean cart before reorder
+   cart.cartitems.all().delete()
+
+   # Copy each OrderItem into a new CartItem
+   for item in prev_order.orderitems.all():
+      cart_item = CartItem.objects.create(
+         cart=cart,
+         pizza=item.pizza,
+         drink=item.drink,
+         quantity=item.quantity,
+      )
+      cart_item.toppings.set(item.toppings.all())
+
+   return redirect("/cart")

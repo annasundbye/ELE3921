@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const hamburgerButton = document.getElementById("hamburger-button");
-  const navMenu = document.getElementById("dropdown-menu");
+  const button = document.getElementById("hamburger-button");
+  const menu = document.getElementById("dropdown-menu");
 
-  hamburgerButton.addEventListener("click", () => {
-    navMenu.classList.toggle("hidden");
+  button.addEventListener("click", () => {
+    menu.classList.toggle("hidden");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!button.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add("hidden");
+    }
   });
 });

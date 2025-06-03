@@ -6,6 +6,8 @@
 
 Make sure you have migrated the database.
 
+`python3 manage.py makemigrations`
+
 `python3 manage.py migrate`
 
 To seed the database, run the following command:

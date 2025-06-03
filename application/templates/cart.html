@@ -1,63 +1,82 @@
 {% extends "layout.html" %} {% block content %}
 
 <div class="page">
-  <h1 class="text-turqoise center">Cart</h1>
-  <h2 class="center" style="color: var(--color-turqoise); font-weight: 800">
-    Here are the items in your cart. Review your order before checkout.
-  </h2>
+  <h2 class="text-center text-pink text-3xl mb-4">Vibe check</h2>
   {% if cart %}
-  <div class="cart-box">
-    <div class="cart-header center">
-      <h2 class="text-black">{{cart.user.username}}'s order</h2>
+  <div
+    class="bg-white rounded-xl flex flex-col items-center w-full max-h-[80vh] mx-auto container max-w-2xl border border-gray-300 pb-2 overflow-hidden"
+  >
+    <div class="bg-yellow pt-6 pb-4 w-full text-center">
+      <h2 class="text-2xl">{{cart.user.username}}'s order</h2>
+      <p>{{ count }} items</p>
+      {% if count > 6 %}
+      <p class="animate-bounce">Scroll to see more of the good stuff :)</p>
+      {% endif %} {% if count == 0 %}
+      <p>Nothing to see here...</p>
+      {% endif %}
     </div>
-    <div>
-      <div>
-        {% for item in items %}
-        <div>
-          <div class="row">
+    <div class="flex flex-col items-start space-y-6 p-2 pb-8 overflow-scroll">
+      {% for item in items %}
+      <div class="flex justify-between w-full gap-2">
+        <div class="flex flex-col">
+          <h3 class="font-semibold text-xl">
             {{item.pizza.pizza.icon}} {{item.pizza.pizza.name}}
-            {{item.pizza.size.name}} x{{item.quantity}}
-            ({{item.pizza.pizza.base_price }},-)
-
-            <form action="/cart/delete-item" method="post">
-              {% csrf_token %}
-              <input type="hidden" name="id" value="{{ item.id }}" />
-              <button type="submit">
-                <i
-                  class="fa-solid fa-trash"
-                  style="color: rgb(225, 65, 65)"
-                ></i>
-              </button>
-            </form>
+          </h3>
+          <div class="flex justify-end gap-2">
+            <p>{{item.pizza.size.name}} x{{item.quantity}}</p>
+            <p class="text-turqoise font-semibold">
+              {{item.pizza.pizza.base_price }},-
+            </p>
           </div>
-          <div style="margin-left: 2rem">
+          <div>
+            {% if item.toppings.all %}
+            <h3 class="font-bold">Toppings</h3>
             {% for topping in item.toppings.all %}
             <div>
               {{topping.icon}} {{topping.name}} ({{ topping.base_price }},-)
             </div>
-            {% endfor %}
+            {% endfor %} {% endif %}
           </div>
+          {% if item.drink %}
+          <h3 class="font-bold">Drink</h3>
+          <div>
+            {{item.drink.icon}} {{item.drink.name}} {{item.drink.price}},-
+          </div>
+          {% endif %}
         </div>
-        {% endfor %}
-      </div>
-    </div>
-
-    <div class="col" style="margin-top: auto">
-      <p>Total price: {{cart.total_price}},-</p>
-      <div class="row">
-        <a href="{% url 'application:menu' %}" class="cta cta-secondary"
-          >Continue shopping</a
-        >
-        <form
-          method="post"
-          action="/order"
-          style="margin-top: auto; margin-bottom: 1rem"
-          class="center col"
-        >
+        <form action="/cart/delete-item" method="post">
           {% csrf_token %}
-          <button title="pay now" class="cta cta-primary">Checkout</button>
+          <input type="hidden" name="id" value="{{ item.id }}" />
+          <button
+            type="submit"
+            title="Delete from cart"
+            class="p-1 size-8 bg-red-100 border border-red-500 rounded-full hover:scale-110 transition-all duration-300"
+          >
+            <i class="fa-solid fa-trash text-red-500"></i>
+          </button>
         </form>
       </div>
+      {% endfor %}
+    </div>
+
+    <div
+      class="mt-auto grid grid-cols-2 gap-2 items-center border-t border-t-gray-300 bg-white pt-2"
+    >
+      <a
+        href="{% url 'application:menu' %}"
+        class="cta cta-secondary w-full"
+        title="Go back to the menu"
+        >Continue shopping</a
+      >
+
+      {% if count > 0 %}
+      <form method="post" action="/order" class="center col">
+        {% csrf_token %}
+        <button title="pay now" class="cta cta-primary w-full">
+          Checkout ({{cart.total_price}},-)
+        </button>
+      </form>
+      {% endif %}
     </div>
   </div>
   {% else %}

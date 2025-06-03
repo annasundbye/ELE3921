@@ -37,12 +37,16 @@ PIZZA_TOPPING_MAP = {
 }
 
 DEFAULT_DRINKS = [
-    Drink(name="Orange juice", price=39.99, icon="🍊", description="I see you're thirsty..."),
-    Drink(name="Lemonade", price=59.99, icon="🍋", description="I see you're thirsty..."),
-    Drink(name="Ice Tea", price=45.99, icon="🌱", description="I see you're thirsty..."),
-    Drink(name="Coca Cola", price=49.99, icon="🥤", description="I see you're thirsty..."),
-    Drink(name="Water", price=49.99, icon="💦", description="I see you're thirsty..."),
-    Drink(name="Sparkling Water", price=49.99, icon="🫧", description="I see you're thirsty..."),
+    Drink(name="Orange Juice", price=19.00, icon="🍊", description="Vitamin C? More like Vitamin Slay."),
+    Drink(name="Apple Juice", price=19.00, icon="🍎", description="iJuice. Gotem."),
+    Drink(name="Lemonade", price=29.00, icon="🍋", description="Sour. Sweet. Just like your ex."),
+    Drink(name="Ice Tea", price=15.00, icon="🌱", description="Chill vibes only. Zero drama."),
+    Drink(name="Coca Cola Small", price=19.00, icon="🥤", description="Iconic. Legendary. Gas."),
+    Drink(name="Coca Cola Large", price=29.00, icon="🥤", description="Iconic. Legendary. Gas."),
+    Drink(name="Water Small", price=19.00, icon="💦", description="Hydrate or diedrate, bestie."),
+    Drink(name="Water Large", price=29.00, icon="💦", description="Hydrate or diedrate, bestie."),
+    Drink(name="Sparkling Water Small", price=19.00, icon="🫧", description="Spicy water for ✨main character energy✨."),
+    Drink(name="Sparkling Water Large", price=29.00, icon="🫧", description="Spicy water for ✨main character energy✨."),
 ]
 
 DEFAULT_SIZES = [
@@ -85,7 +89,7 @@ class Command(BaseCommand):
             for topping_name in topping_names:
                 topping = topping_map.get(topping_name)
                 if topping:
-                    pizza_to_add.available_toppings.add(topping)
+                    pizza_to_add.toppings.add(topping)
                     
             pizza_to_add.save()
 

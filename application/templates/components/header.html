@@ -1,0 +1,25 @@
+<header class="header">
+  <a href="{% url 'application:home' %}" class="bebas-neue text-white">
+    <h1 class="text-3xl">Crust Issues</h1>
+    <p>pizza that slaps fr fr</p>
+  </a>
+
+  <nav class="row">
+    {% if user.is_authenticated %}
+    <a href="{% url 'application:profile' %}" class="text-white">
+      hey, {{ user.username }} ✌️
+    </a>
+    {% else %}
+    <a href="{% url 'application:login' %}" class="text-white"
+      >sign in bestie</a
+    >
+    {% endif %}
+    <a
+      class="rounded-full w-16 h-12 bg-white border border-gray-300 center hover:bg-[var(--color-turqoise)] group transition-colors duration-300"
+      href="{% url 'application:cart' %}"
+    >
+      <span class="group-hover:animate-spin">🛒</span>
+    </a>
+    {% include "components/dropdown-menu.html" %}
+  </nav>
+</header>
