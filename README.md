@@ -4,6 +4,8 @@
 
 This is our Pizzeria Takeout web app. It is built in Django. It uses HTML templates with JavaScript and CSS / Tailwind CSS on the frontend. The database is sqlite. 
 
+[Link to YouTube](https://youtube.com/)
+
 ## Start the app!
 
 To get started, you need to install the dependencies listed in `application/requirements.txt`. Run the following command:
