@@ -46,6 +46,15 @@
       />
     </div>
 
+    {% if messages %}
+      <ul class="text-red-600 mb-4">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+
     <div class="mt-6 space-y-2">
       <button type="submit" class="cta cta-primary w-full">Sign up</button>
       <p class="center">

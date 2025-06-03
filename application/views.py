@@ -33,6 +33,7 @@ def select_pizza(request, pizza_id):
    
    sizes = Size.objects.all()
    for size in sizes:
+      # adding a new price for the pizzas given the size
       size.calculated_price = round(pizza.base_price * size.multiplier, 2)
    
    return render(request, "select-pizza.html", {
@@ -61,20 +62,48 @@ def login(request):
 
 def signup(request):
    if request.method == "POST":
-      firstname = request.POST.get("firstname")
-      lastname = request.POST.get("lastname")
-      email = request.POST.get("email")
-      username = request.POST.get("username")
-      password = request.POST.get("password")
-      
-      user = User.objects.create_user(username, password, email)
-      user.last_name = lastname
+      firstname = request.POST.get("firstname", "").strip()
+      lastname = request.POST.get("lastname", "").strip()
+      email = request.POST.get("email", "").strip()
+      username = request.POST.get("username", "").strip()
+      password = request.POST.get("password", "").strip()
+
+      # Validation
+      if not all([firstname, lastname, email, username, password]):
+         messages.error(request, "All fields are required.")
+         return redirect("signup")
+
+      try:
+         validate_email(email)
+      except ValidationError:
+         messages.error(request, "Enter a valid email address.")
+         return redirect("signup")
+
+      if len(password) < 8:
+         messages.error(request, "Password must be at least 8 characters.")
+         return redirect("signup")
+
+      if not firstname.isalpha() or not lastname.isalpha():
+         messages.error(request, "First and last names must contain only letters.")
+         return redirect("signup")
+
+      if User.objects.filter(username=username).exists():
+         messages.error(request, "Username is already taken.")
+         return redirect("signup")
+
+      if User.objects.filter(email=email).exists():
+         messages.error(request, "Email is already in use.")
+         return redirect("signup")
+
+      # Create the user
+      user = User.objects.create_user(username=username, password=password, email=email)
       user.first_name = firstname
+      user.last_name = lastname
       user.save()
-      
+
       auth_login(request, user)
       return redirect("/")
-      
+
    return render(request, "signup.html")
 
 def logout(request):
