@@ -52,7 +52,8 @@ def login(request):
          auth_login(request, user) 
          return redirect("/")
       else:
-         return render(request, "login.html", {"error": "Invalid credentials."})
+         messages.error(request, "Wrong username or password")
+         return render(request, "login.html")
 
    return render(request, "login.html")
 
