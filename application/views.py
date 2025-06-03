@@ -241,13 +241,13 @@ def order(request):
       if not request.user.is_authenticated:
          return redirect("/login")
 
-      # Get the user's cart
+      # Get user's cart
       try:
          cart = Cart.objects.get(user=request.user)
       except Cart.DoesNotExist:
-         return redirect("/cart")  # No cart to process
+         # No cart
+         return redirect("/cart")
 
-      # Get the cart items
       items = CartItem.objects.filter(cart=cart)
 
       if not items.exists():
@@ -271,7 +271,7 @@ def order(request):
          new_order_item.toppings.set(item.toppings.all())
          new_order_item.save()
 
-      # Clear/delete the cart
+      # Clear cart
       cart.delete()
       
       # to show confirmation
@@ -279,6 +279,7 @@ def order(request):
 
       return redirect("/order")
 
+   # to show order confirmation
    just_ordered = request.session.pop("just_ordered", False)
 
    return render(request, "order.html", {
@@ -296,25 +297,22 @@ def past_orders(request):
       .order_by("-created_at")
    )
    
-   for order in orders:
-      print(order, "has", order.orderitems.all())
-   
    return render(request, "past-orders.html", {"orders": orders})
 
 def reorder(request, order_id):
    if not request.user.is_authenticated:
       return redirect("/login")
 
-   # Get the previous order
+   # Get the prev order
    prev_order = get_object_or_404(Order, id=order_id, user=request.user)
 
    # Create or get current cart
    cart, _ = Cart.objects.get_or_create(user=request.user)
 
-   # Clear existing cart items if you want a clean cart before reorder
+   # clean cart
    cart.cartitems.all().delete()
 
-   # Copy each OrderItem into a new CartItem
+   # Copy each item into a new CartItem
    for item in prev_order.orderitems.all():
       cart_item = CartItem.objects.create(
          cart=cart,

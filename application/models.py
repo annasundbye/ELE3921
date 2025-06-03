@@ -3,7 +3,6 @@ from django.db import models
 
 
 class Size(models.Model):
-    """Pizza size. Can be small, medium or large."""
     name = models.CharField(max_length=10)
     multiplier = models.DecimalField(max_digits=6, decimal_places=2, default=1.0)
     description = models.CharField(max_length=50, default="")
@@ -12,7 +11,6 @@ class Size(models.Model):
         return self.name
 
 class Topping(models.Model):
-    """The different kinds of topping on a pizza."""
     name = models.CharField(max_length=50)
     icon = models.CharField(max_length=50, default="")
     base_price = models.DecimalField(max_digits=6, decimal_places=2, default=15.00)
